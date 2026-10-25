@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 在题评网页填写评分
+    url: https://yjdqwq.github.io/
+    about: 网页会生成可汇总的评分格式；普通反馈也可以直接发 Issue。
