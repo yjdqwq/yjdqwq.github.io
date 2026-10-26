@@ -1,5 +1,8 @@
 export const REPOSITORY = 'yjdqwq/yjdqwq.github.io';
 export const MIN_RANK_VOTES = 5;
+export const MAX_BATCH_REVIEWS = 500;
+export const MAX_ISSUE_BODY_BYTES = 60000;
+export const MAX_ISSUE_URL_LENGTH = 7000;
 export const EXPERIENCES = { independent: '独立完成', editorial: '参考题解并理解' };
 export const PURPOSES = { contest: '竞赛体验', training: '学习训练' };
 export const TAGS = ['观察有趣', '模型自然', '证明漂亮', '学习路径清楚', '实现负担重', '题意绕', '工具拼装感', '资源设置欠妥'];
@@ -17,6 +20,30 @@ export const BANDS = [
 export const signed = (value, digits = 0) => { const rounded = Number(Number(value).toFixed(digits)); return `${rounded > 0 ? '+' : ''}${rounded.toFixed(digits)}`; };
 export const bandFor = score => BANDS.find(b => Math.round(score) >= b.min && Math.round(score) <= b.max);
 export const toneFor = score => score < 0 ? 'negative' : score > 0 ? 'positive' : 'neutral';
+
+export function validateAIAnchors(raw) {
+  if (raw?.schema !== 1 || raw.purpose !== 'contest' || !Array.isArray(raw.entries) || !raw.entries.length) throw new Error('AI 参考评分格式不正确。');
+  if (!raw.id || !raw.generatedAt || Number.isNaN(Date.parse(raw.generatedAt))) throw new Error('AI 参考评分缺少版本或日期。');
+  const seen = new Set();
+  const entries = raw.entries.map(entry => {
+    const problem = canonicalProblem(entry.problemUrl);
+    if (problem.platform !== '洛谷' || !/^P\d+$/.test(problem.code)) throw new Error('AI 参考集须使用洛谷主题库链接。');
+    if (!Number.isInteger(entry.score) || entry.score < -10 || entry.score > 10) throw new Error(`${problem.code} 的 AI 分数不合法。`);
+    if (!Number.isInteger(entry.year) || entry.year < 2022 || entry.year > 2026) throw new Error('AI 参考集年份超出范围。');
+    if (!['CSP-J', 'CSP-S', 'NOIP', '省选', 'NOI', 'APIO', 'WC', 'IOI'].includes(entry.family) || !['low', 'medium'].includes(entry.confidence)) throw new Error('AI 参考评分的赛事或复核状态不合法。');
+    for (const field of ['title', 'contest', 'reason']) if (typeof entry[field] !== 'string' || !entry[field].trim() || entry[field].length > 500) throw new Error(`${problem.code} 缺少说明。`);
+    if (seen.has(problem.id)) throw new Error('AI 参考集含有重复题目。');
+    seen.add(problem.id);
+    const sourceUrls = entry.sourceUrls ?? [];
+    if (!Array.isArray(sourceUrls) || sourceUrls.length > 8 || sourceUrls.some(value => {
+      try { const url = new URL(value); return url.protocol !== 'https:' || Boolean(url.username || url.password || url.port); }
+      catch { return true; }
+    })) throw new Error(`${problem.code} 的参考来源链接不合法。`);
+    return { ...problem, key: `${problem.id}@public-v1`, version: 'public-v1', title: entry.title, year: entry.year, family: entry.family,
+      contest: entry.contest, score: entry.score, reason: entry.reason, confidence: entry.confidence, sourceUrls, basis: 'public-material-review' };
+  });
+  return { ...raw, entries };
+}
 
 export function canonicalProblem(input) {
   let u;
@@ -43,7 +70,19 @@ export function canonicalProblem(input) {
 }
 
 export function validatePayload(raw) {
-  if (!raw || raw.schema !== 1 || !['review', 'problem'].includes(raw.type)) throw new Error('无法识别的评分格式。');
+  if (!raw || raw.schema !== 1 || !['review', 'problem', 'review-batch'].includes(raw.type)) throw new Error('无法识别的评分格式。');
+  if (raw.type === 'review-batch') {
+    if (!Array.isArray(raw.reviews) || !raw.reviews.length || raw.reviews.length > MAX_BATCH_REVIEWS) throw new Error(`每批须包含 1～${MAX_BATCH_REVIEWS} 条评分。`);
+    const seen = new Set();
+    const reviews = raw.reviews.map(item => {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('批量评分中含有无效记录。');
+      const review = validatePayload({ version: raw.version, purpose: raw.purpose, experience: raw.experience, ...item, schema: 1, type: 'review' });
+      const key = `${review.key}|${review.purpose}`;
+      if (seen.has(key)) throw new Error('同一批中同题、同版本、同用途不能重复评分。');
+      seen.add(key); return review;
+    });
+    return { schema: 1, type: 'review-batch', reviews };
+  }
   const p = canonicalProblem(raw.problemUrl ?? '');
   const version = raw.version ?? 'public-v1';
   if (!/^[a-z0-9.-]{1,40}$/.test(version)) throw new Error('版本标识须为 1～40 位小写字母、数字、点或连字符。');
@@ -55,7 +94,7 @@ export function validatePayload(raw) {
   if (!Object.hasOwn(EXPERIENCES, raw.experience)) throw new Error('总评分需要独立完成，或参考题解后理解完整做法。');
   if (!Object.hasOwn(PURPOSES, raw.purpose)) throw new Error('请选择评分用途。');
   const reason = String(raw.reason ?? '').trim();
-  if (reason.length < 12 || reason.length > 2000) throw new Error('请用 12～2000 个字符说明具体的亮点或问题。');
+  if (reason.length > 2000) throw new Error('评价理由不能超过 2000 个字符；也可以只打分。');
   const spoiler = String(raw.spoiler ?? '').trim();
   if (spoiler.length > 5000) throw new Error('剧透补充不能超过 5000 个字符。');
   const tags = [...new Set(Array.isArray(raw.tags) ? raw.tags.filter(x => TAGS.includes(x)) : [])].slice(0, 4);
@@ -65,14 +104,52 @@ export function validatePayload(raw) {
 export function issueBody(raw) {
   const p = validatePayload(raw);
   const { key, ...payload } = p;
-  return `由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\`\n`;
+  let serialized = payload;
+  if (p.type === 'review-batch') {
+    serialized = { schema: 1, type: p.type };
+    for (const field of ['purpose', 'experience', 'version']) {
+      if (p.reviews.every(r => r[field] === p.reviews[0][field])) serialized[field] = p.reviews[0][field];
+    }
+    serialized.reviews = p.reviews.map(({ schema, type, key, ...review }) => Object.fromEntries(Object.entries(review)
+      .filter(([field, value]) => !Object.hasOwn(serialized, field) && value !== '' && !(Array.isArray(value) && !value.length))));
+  }
+  const note = p.type === 'review-batch' ? '编辑整批会更新其中所有评分；关闭此 Issue 即撤回本批评分。' : '关闭此 Issue 即撤回这条记录。';
+  const body = `由题评网页生成。请保留下面的数据块；你可以修改后重新提交。${note}\n\n<!-- problem-notes:v1 -->\n\n\`\`\`json\n${JSON.stringify(serialized, null, p.type === 'review-batch' ? undefined : 2)}\n\`\`\`\n`;
+  if (new TextEncoder().encode(body).length > MAX_ISSUE_BODY_BYTES) throw new Error('本批内容过长，请分批提交。');
+  return body;
 }
-export function issueLink(payload) {
-  const prefix = payload.type === 'review' ? '评分' : '收录';
+export function issueLink(payload, { includeBody = true } = {}) {
+  const p = validatePayload(payload);
+  const title = p.type === 'review-batch' ? `[批量评分] ${p.reviews.length} 道题` : `[${p.type === 'review' ? '评分' : '收录'}] ${p.problemTitle}`;
   const u = new URL(`https://github.com/${REPOSITORY}/issues/new`);
-  u.searchParams.set('title', `[${prefix}] ${payload.problemTitle}`);
-  u.searchParams.set('body', issueBody(payload));
+  u.searchParams.set('title', title);
+  if (includeBody) u.searchParams.set('body', issueBody(p));
   return u.href;
+}
+
+export function prepareSubmissions(raw) {
+  const p = validatePayload(raw);
+  const groups = [];
+  if (p.type !== 'review-batch') groups.push(p);
+  else {
+    let reviews = [];
+    for (const review of p.reviews) {
+      const candidate = { schema: 1, type: 'review-batch', reviews: [...reviews, review] };
+      try { issueBody(candidate); reviews.push(review); }
+      catch (error) {
+        if (!reviews.length) throw error;
+        groups.push({ schema: 1, type: 'review-batch', reviews }); reviews = [review];
+        issueBody({ schema: 1, type: 'review-batch', reviews });
+      }
+    }
+    if (reviews.length) groups.push({ schema: 1, type: 'review-batch', reviews });
+  }
+  return groups.map(payload => {
+    const body = issueBody(payload); const fullURL = issueLink(payload);
+    const manual = fullURL.length > MAX_ISSUE_URL_LENGTH;
+    return { body, url: manual ? issueLink(payload, { includeBody: false }) : fullURL, manual,
+      count: payload.type === 'review-batch' ? payload.reviews.length : 1 };
+  });
 }
 
 export function parseIssue(issue, { includeInactive = false } = {}) {
@@ -80,7 +157,7 @@ export function parseIssue(issue, { includeInactive = false } = {}) {
   const active = issue.state === 'open' && !issue.labels?.some(l => ['rating:excluded', 'rating:withdrawn'].includes(typeof l === 'string' ? l : l.name));
   if (!active && !includeInactive) return null;
   const body = issue.body ?? '';
-  if (!body.includes('<!-- problem-notes:v1 -->') || body.length > 20000) return null;
+  if (!body.includes('<!-- problem-notes:v1 -->') || new TextEncoder().encode(body).length > MAX_ISSUE_BODY_BYTES) return null;
   const structured = body.slice(body.indexOf('<!-- problem-notes:v1 -->') + '<!-- problem-notes:v1 -->'.length);
   const m = structured.match(/```json[^\S\r\n]*\r?\n([\s\S]*?)\r?\n```[^\S\r\n]*(?:\r?\n|$)/);
   if (!m) return null;
@@ -96,7 +173,11 @@ export function parseIssue(issue, { includeInactive = false } = {}) {
 
 export function buildDataset(seed, issues, generatedAt = new Date().toISOString()) {
   const problems = new Map(seed.map(p => [p.key, p]));
-  const parsed = issues.map(i => parseIssue(i, { includeInactive: true })).filter(Boolean).sort((a, b) => a.issue - b.issue);
+  const parsed = issues.map(i => parseIssue(i, { includeInactive: true })).filter(Boolean).flatMap(p => {
+    if (p.type !== 'review-batch') return [p];
+    const { reviews, ...metadata } = p;
+    return reviews.map(review => ({ ...metadata, ...review }));
+  }).sort((a, b) => a.issue - b.issue);
   for (const p of parsed) {
     if (p.active && !problems.has(p.key)) {
       const c = canonicalProblem(p.problemUrl);
