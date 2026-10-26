@@ -25,7 +25,7 @@
   </header>
 
   <main id="main" class="page-shell">
-    <div id="previewNotice" class="preview-notice" hidden>预览版本 · 目标仓库尚未上线。你可以体验检索、评分和草稿；公开提交将在仓库部署后可用。</div>
+    <div id="previewNotice" class="preview-notice" hidden>本地预览 · 草稿保存在当前浏览器；公开评分需在 GitHub 确认提交。</div>
     <section id="libraryHero" class="hero">
       <div class="hero-copy">
         <p class="eyebrow"><span></span> 为解题体验，留下一份有依据的记录</p>
@@ -53,11 +53,13 @@
           <div class="table-scroll"><table class="problem-table"><thead><tr><th class="favorite-col"><span class="sr-only">收藏</span></th><th>题目 / 来源</th><th class="score-col">质量均分</th><th class="distribution-col">分布</th><th class="count-col">人数</th><th class="arrow-col"></th></tr></thead><tbody id="problemRows"></tbody></table></div>
           <div id="tableEmpty" class="empty-state" hidden><span class="empty-symbol">[ · ]</span><h3>这里还没有题目</h3><p>试试其他关键词，或收录一道你想讨论的题。</p><button id="clearFilters" class="button small">清除筛选</button></div>
           <div id="loadError" class="error-state" hidden><p>题库暂时无法读取，请检查网络后重试。</p><button id="retryLoad" class="button small">重新加载</button></div>
-          <div class="table-bottom"><span>待评 ≠ 0 分。初始题库未导入任何虚构评价。</span><button id="refreshData" class="text-button">↻ 刷新数据</button></div>
+          <div class="pagination" id="pagination" hidden><div class="page-size"><span id="pageRange"></span><label>每页 <select id="pageSize" aria-label="每页题目数"><option>25</option><option>50</option><option>100</option></select> 道</label></div><div class="page-controls"><button id="previousPage" class="button small" type="button">上一页</button><span id="pageNumber" aria-live="polite">1 / 1</span><button id="nextPage" class="button small" type="button">下一页</button><form id="jumpForm"><label class="sr-only" for="jumpPage">跳转页码</label><input id="jumpPage" type="number" min="1" max="1" value="1" required><button class="text-button" type="submit">跳转</button></form></div></div>
+          <div class="table-bottom"><span>待评 ≠ 0 分。题库收录不代表质量推荐。</span><button id="refreshData" class="text-button">↻ 刷新数据</button></div>
         </section>
         <aside class="sidebar">
           <section class="note-card"><div class="card-heading"><span class="note-icon">↗</span><span>怎样写一份有用的评价</span></div><ol class="review-tips"><li><span>01</span><div><strong>先理解，再评分</strong><p>独立完成，或理解完整题解。解题经历会和评价一起展示。</p></div></li><li><span>02</span><div><strong>留下具体的得失</strong><p>哪一步有意思？哪里增加了负担？算法名称并不能代替理由。</p></div></li><li><span>03</span><div><strong>允许别人不同意</strong><p>均值之外，也保留中位数、人数和完整分布。</p></div></li></ol><a class="inline-link" href="#guide">查看完整评分标准 <span>→</span></a></section>
           <section class="quiet-card"><span class="small-label">先看经历，再看分数</span><h3>有分歧，也有信息量。</h3><p>竞赛体验与学习训练分别统计。没有统一的“好题公式”，只有可以讨论的具体判断。</p><div class="quiet-card-footer"><span class="tiny-square"></span> 榜单至少需要 5 位有效评价者</div></section>
+          <details class="catalogue-status"><summary>题库来源与更新</summary><div id="catalogueSources"></div></details>
           <section class="update-note"><span class="status-dot"></span><p>数据快照 <time id="updatedAt">—</time><small>GitHub 提交后，自动汇总更新。</small></p></section>
         </aside>
       </div>
@@ -86,3 +88,4 @@
   <script type="module" src="./app.mjs"></script>
 </body>
 </html>
+

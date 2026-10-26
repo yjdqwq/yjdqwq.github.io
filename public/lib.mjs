@@ -32,12 +32,12 @@ export function canonicalProblem(input) {
   if (host === 'qoj.ac' && (m = path.match(/^\/problem\/([1-9]\d*)$/))) {
     return { id: `qoj:${m[1]}`, code: `#${m[1]}`, platform: 'QOJ', url: `https://qoj.ac/problem/${m[1]}` };
   }
-  if (['codeforces.com', 'www.codeforces.com'].includes(host) && (m = path.match(/^\/(?:problemset\/problem|contest)\/(\d+)\/(?:problem\/)?([a-z]\d?)$/i))) {
-    const code = `${m[1]}${m[2].toUpperCase()}`;
+  if (['codeforces.com', 'www.codeforces.com'].includes(host) && (m = path.match(/^\/(?:problemset\/problem|contest)\/(\d+)\/(?:problem\/)?([a-z]\d{0,2}|\d{1,2})$/i))) {
+    const code = `${m[1]}${/^\d/.test(m[2]) ? '-' : ''}${m[2].toUpperCase()}`;
     return { id: `codeforces:${code}`, code, platform: 'Codeforces', url: `https://codeforces.com/problemset/problem/${m[1]}/${m[2].toUpperCase()}` };
   }
   if (host === 'atcoder.jp' && (m = path.match(/^\/contests\/([a-z0-9_-]+)\/tasks\/([a-z0-9_-]+)$/i))) {
-    return { id: `atcoder:${m[1]}/${m[2]}`, code: m[2], platform: 'AtCoder', url: `https://atcoder.jp/contests/${m[1]}/tasks/${m[2]}` };
+    return { id: `atcoder:${m[2]}`, code: m[2], platform: 'AtCoder', url: `https://atcoder.jp/contests/${m[1]}/tasks/${m[2]}` };
   }
   throw new Error('暂支持洛谷 P/T/U、QOJ、Codeforces 和 AtCoder 的正式题目链接。');
 }
@@ -48,7 +48,7 @@ export function validatePayload(raw) {
   const version = raw.version ?? 'public-v1';
   if (!/^[a-z0-9.-]{1,40}$/.test(version)) throw new Error('版本标识须为 1～40 位小写字母、数字、点或连字符。');
   const title = String(raw.problemTitle ?? '').trim();
-  if (!title || title.length > 100) throw new Error('题目名称须为 1～100 个字符。');
+  if (!title || title.length > 200) throw new Error('题目名称须为 1～200 个字符。');
   const base = { schema: 1, type: raw.type, problemUrl: p.url, problemTitle: title, version, key: `${p.id}@${version}` };
   if (raw.type === 'problem') return base;
   if (!Number.isInteger(raw.score) || raw.score < -10 || raw.score > 10) throw new Error('请选择 -10～10 的整数分；未选择不等于 0 分。');
@@ -122,3 +122,4 @@ export function summarize(reviews) {
     spread: Math.sqrt(a.reduce((s, x) => s + (x - mean) ** 2, 0) / a.length),
     histogram: Array.from({ length: 21 }, (_, i) => a.filter(x => x === i - 10).length) };
 }
+

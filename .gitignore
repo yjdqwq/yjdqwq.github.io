@@ -1,3 +1,6 @@
 dist/
+.cache/
+.openai/
 node_modules/
 .DS_Store
+

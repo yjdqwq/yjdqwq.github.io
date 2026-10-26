@@ -1,4 +1,5 @@
 import { REPOSITORY, MIN_RANK_VOTES, EXPERIENCES, PURPOSES, TAGS, BANDS, signed, bandFor, toneFor, validatePayload, issueLink, summarize } from './lib.mjs';
+import { selectCatalogue } from './catalogue.mjs';
 const $ = id => document.getElementById(id);
 const storage = {
   get(key, fallback) { try { return JSON.parse(localStorage.getItem(`problem-notes:${key}`)) ?? fallback; } catch { return fallback; } },
@@ -6,7 +7,7 @@ const storage = {
 };
 const savedFavorites = storage.get('favorites', []);
 const state = { data: { problems: [], reviews: [] }, purpose: 'contest', mode: 'library', hidden: storage.get('hide-scores', false) === true,
-  favorites: new Set(Array.isArray(savedFavorites) ? savedFavorites : []), current: null, score: null, tags: new Set(), loaded: false };
+  favorites: new Set(Array.isArray(savedFavorites) ? savedFavorites : []), current: null, score: null, tags: new Set(), loaded: false, page: 1 };
 let toastTimer;
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 3500); }
@@ -30,20 +31,12 @@ function miniature(summary) {
 }
 
 function renderTable() {
-  const q = $('search').value.trim().toLowerCase();
-  let items = state.data.problems.map(p => ({ p, s: summarize(reviewsFor(p.key)) })).filter(({ p, s }) => {
-    return (!q || `${p.title} ${p.code} ${p.source} ${p.platform}`.toLowerCase().includes(q)) &&
-      (!$('platform').value || p.platform === $('platform').value) && (!$('favoritesOnly').checked || state.favorites.has(p.key)) &&
-      (state.mode !== 'rank' || s.n >= MIN_RANK_VOTES);
+  const result = selectCatalogue(state.data.problems, state.data.reviews, {
+    query: $('search').value, platform: $('platform').value, purpose: state.purpose,
+    independentOnly: $('independentOnly').checked, favoritesOnly: $('favoritesOnly').checked,
+    favorites: state.favorites, mode: state.mode, sort: $('sort').value, page: state.page, pageSize: $('pageSize').value
   });
-  const sort = state.mode === 'rank' && $('sort').value === 'catalogue' ? 'score-desc' : $('sort').value;
-  if (sort !== 'catalogue') items.sort((a, b) => {
-    if (sort === 'title') return a.p.title.localeCompare(b.p.title, 'zh-CN');
-    if (sort === 'votes') return b.s.n - a.s.n;
-    if (a.s.mean === null) return b.s.mean === null ? 0 : 1;
-    if (b.s.mean === null) return -1;
-    return sort === 'score-asc' ? a.s.mean - b.s.mean : b.s.mean - a.s.mean;
-  });
+  const { items, total, pages, first, last } = result; state.page = result.page;
   $('problemRows').replaceChildren();
   for (const { p, s } of items) {
     const tr = el('tr');
@@ -68,14 +61,31 @@ function renderTable() {
     arrow.setAttribute('aria-label', `查看 ${p.title} 并评分`); arrow.addEventListener('click', () => showProblem(p)); action.append(arrow);
     tr.append(starCell, nameCell, score, chart, count, action); $('problemRows').append(tr);
   }
-  $('resultCount').textContent = `${items.length} 道题目 · ${PURPOSES[state.purpose]}${$('independentOnly').checked ? ' · 独立完成者' : ''}`;
+  $('resultCount').textContent = `${total.toLocaleString('zh-CN')} 道题目 · ${PURPOSES[state.purpose]}${$('independentOnly').checked ? ' · 独立完成者' : ''}`;
+  $('pageRange').textContent = total ? `第 ${first}–${last} 道` : '没有匹配题目';
+  $('pageNumber').textContent = `${state.page} / ${pages}`;
+  $('previousPage').disabled = state.page <= 1;
+  $('nextPage').disabled = state.page >= pages;
+  $('jumpPage').max = pages; $('jumpPage').value = state.page;
+  $('pagination').hidden = total === 0;
   $('tableEmpty').hidden = items.length > 0 || !state.loaded;
   $('tableEmpty').querySelector('h3').textContent = state.mode === 'rank' ? '榜单还在等待第一批评价' : '没有找到匹配的题目';
   $('tableEmpty').querySelector('p').textContent = state.mode === 'rank' ? `同用途下至少 ${MIN_RANK_VOTES} 人评价后进入榜单。先去题库留下第一份判断。` : '试试其他关键词，或收录一道你想讨论的题。';
   $('clearFilters').textContent = state.mode === 'rank' ? '回到题库' : '清除筛选';
-  $('problemCount').textContent = state.data.problems.length;
+  $('problemCount').textContent = state.data.problems.length.toLocaleString('zh-CN');
   $('reviewCount').textContent = state.data.reviews.length;
   const eye = $('hideScores'); eye.textContent = state.hidden ? '◉ 显示评分' : '◉ 隐藏评分'; eye.setAttribute('aria-pressed', String(state.hidden));
+}
+
+function renderSources() {
+  const container = $('catalogueSources'); container.replaceChildren();
+  for (const source of state.data.catalogueSources || []) {
+    const row = el('div', 'catalogue-source');
+    row.append(el('strong', '', `${source.platform} · ${Number(source.count).toLocaleString('zh-CN')} 道`),
+      el('span', '', source.label), el('small', '', source.updatedAt ? `${source.status === 'stale' ? '更新暂缓，保留快照 · ' : ''}${readableDate(source.updatedAt)}` : '暂未成功导入'));
+    container.append(row);
+  }
+  container.append(el('p', '', 'QOJ 目前通过社区收录扩充。题库只索引题号、标题和原题链接；题面请在原 OJ 阅读。'));
 }
 
 function renderDistribution(reviews) {
@@ -147,7 +157,7 @@ function renderTagChoices() {
 function showProblem(problem) {
   state.current = problem; state.score = null; state.tags = new Set();
   $('detailCode').textContent = `${problem.platform} / ${problem.code}`;
-  $('detailTitle').textContent = problem.title; $('detailSource').textContent = problem.source || '社区收录';
+  $('detailTitle').textContent = problem.title; $('detailSource').textContent = `${problem.source || '社区收录'}${problem.difficulty ? ` · 平台难度：${problem.difficulty}` : ''}`;
   $('originalLink').href = problem.url; $('detailPurpose').textContent = PURPOSES[state.purpose]; $('formPurpose').textContent = PURPOSES[state.purpose]; $('detailVersion').textContent = problem.version;
   const reviews = reviewsFor(problem.key); renderDistribution(reviews); renderReviews(reviews);
   $('reviewForm').reset(); $('formError').hidden = true;
@@ -169,7 +179,7 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (data.schema !== 1 || !Array.isArray(data.problems) || !Array.isArray(data.reviews)) throw new Error('数据格式不匹配');
-    state.data = data; state.loaded = true; $('updatedAt').textContent = readableDate(data.generatedAt); renderTable();
+    state.data = data; state.loaded = true; $('updatedAt').textContent = readableDate(data.generatedAt); renderTable(); renderSources();
     if ($('problemDialog').open && state.current) { renderDistribution(reviewsFor(state.current.key)); renderReviews(reviewsFor(state.current.key)); }
   } catch (error) {
     $('loadError').hidden = false; $('loadError').querySelector('p').textContent = `题库暂时无法读取（${error.message}）。请重新加载，或通过 HTTP 静态服务器打开网页。`;
@@ -180,6 +190,7 @@ async function loadData() {
 function changeView() {
   const view = location.hash.slice(1) || 'library';
   state.mode = view === 'rank' ? 'rank' : 'library';
+  state.page = 1;
   $('libraryView').hidden = !['library', 'rank'].includes(view);
   $('libraryHero').hidden = view !== 'library'; $('guideView').hidden = view !== 'guide'; $('researchView').hidden = view !== 'research';
   if (!['library', 'rank', 'guide', 'research'].includes(view)) { location.hash = 'library'; return; }
@@ -198,9 +209,16 @@ for (const band of BANDS) {
   const row = el('div', `band-row ${band.min === 0 ? 'zero-row' : ''}`);
   row.append(el('span', `band-range ${toneFor(band.min)}`, band.min === band.max ? signed(band.min) : `${signed(band.min)}～${signed(band.max)}`), el('strong', '', band.label), el('p', '', band.text)); $('bandsTable').append(row);
 }
-for (const id of ['search', 'platform', 'sort', 'independentOnly', 'favoritesOnly']) $(id).addEventListener(id === 'search' ? 'input' : 'change', renderTable);
+let searchTimer;
+$('search').addEventListener('input', () => { clearTimeout(searchTimer); state.page = 1; searchTimer = setTimeout(renderTable, 120); });
+for (const id of ['platform', 'sort', 'independentOnly', 'favoritesOnly', 'pageSize']) $(id).addEventListener('change', () => { state.page = 1; renderTable(); });
+for (const [id, delta] of [['previousPage', -1], ['nextPage', 1]]) $(id).addEventListener('click', () => {
+  state.page += delta; renderTable(); $('libraryHeading').scrollIntoView({ block: 'start' });
+});
+$('jumpForm').addEventListener('submit', event => { event.preventDefault(); state.page = Number($('jumpPage').value); renderTable(); $('libraryHeading').scrollIntoView({ block: 'start' }); });
 for (const b of document.querySelectorAll('[data-purpose]')) b.addEventListener('click', () => {
   state.purpose = b.dataset.purpose;
+  state.page = 1;
   for (const x of document.querySelectorAll('[data-purpose]')) { x.classList.toggle('selected', x === b); x.setAttribute('aria-pressed', String(x === b)); }
   renderTable();
 });
@@ -210,6 +228,7 @@ $('hideScores').addEventListener('click', () => {
 });
 $('clearFilters').addEventListener('click', () => {
   $('search').value = ''; $('platform').value = ''; $('favoritesOnly').checked = false; $('independentOnly').checked = false;
+  state.page = 1;
   if (state.mode === 'rank') location.hash = 'library'; else renderTable();
 });
 $('heroReview').addEventListener('click', () => { $('search').focus(); $('search').scrollIntoView({ behavior: 'smooth', block: 'center' }); toast('搜索你想评价的题目，然后打开详情。'); });
@@ -239,3 +258,4 @@ document.addEventListener('keydown', e => { if (e.key === '/' && !['INPUT', 'TEX
 window.addEventListener('hashchange', changeView);
 $('previewNotice').hidden = location.hostname === 'yjdqwq.github.io';
 changeView(); loadData();
+
