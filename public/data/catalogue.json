@@ -6,5 +6,8 @@
   {"id":"qoj:10100","key":"qoj:10100@public-v1","code":"#10100","platform":"QOJ","title":"Exchanging Kubic 3","url":"https://qoj.ac/problem/10100","source":"The 2nd Universal Cup Finals","version":"public-v1","tags":[],"difficulty":null},
   {"id":"qoj:14579","key":"qoj:14579@public-v1","code":"#14579","platform":"QOJ","title":"火花","url":"https://qoj.ac/problem/14579","source":"集训队互测 2025 Round 3","version":"public-v1","tags":[],"difficulty":null},
   {"id":"qoj:15459","key":"qoj:15459@public-v1","code":"#15459","platform":"QOJ","title":"树的价值","url":"https://qoj.ac/problem/15459","source":"NOIP 2025","version":"public-v1","tags":["树"],"difficulty":null},
-  {"id":"qoj:9239","key":"qoj:9239@public-v1","code":"#9239","platform":"QOJ","title":"Hieroglyphs","url":"https://qoj.ac/problem/9239","source":"IOI 2024 Day 2","version":"public-v1","tags":[],"difficulty":null}
+  {"id":"qoj:9239","key":"qoj:9239@public-v1","code":"#9239","platform":"QOJ","title":"Hieroglyphs","url":"https://qoj.ac/problem/9239","source":"IOI 2024 Day 2","version":"public-v1","tags":[],"difficulty":null},
+  {"id":"luogu:B3607","key":"luogu:B3607@public-v1","code":"B3607","platform":"洛谷","title":"[图论与代数结构 502] 网络流_2","url":"https://www.luogu.com.cn/problem/B3607","source":"图论与代数结构 502","version":"public-v1","tags":[],"difficulty":null},
+  {"id":"luogu:CF985F","key":"luogu:CF985F@public-v1","code":"CF985F","platform":"洛谷","title":"Isomorphic Strings","url":"https://www.luogu.com.cn/problem/CF985F","source":"Codeforces · 洛谷 RemoteJudge","version":"public-v1","tags":[],"difficulty":null}
 ]
+

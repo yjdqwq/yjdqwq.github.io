@@ -25,7 +25,7 @@ export function canonicalProblem(input) {
   const host = u.hostname.toLowerCase();
   const path = u.pathname.replace(/\/$/, '');
   let m;
-  if (['luogu.com.cn', 'www.luogu.com.cn'].includes(host) && (m = path.match(/^\/problem\/((?:P|T|U)\d+)$/i))) {
+  if (['luogu.com.cn', 'www.luogu.com.cn'].includes(host) && (m = path.match(/^\/problem\/((?:P|B|T|U)\d+|CF\d+[a-z]\d{0,2})$/i))) {
     const id = m[1].toUpperCase();
     return { id: `luogu:${id}`, code: id, platform: '洛谷', url: `https://www.luogu.com.cn/problem/${id}` };
   }
@@ -39,7 +39,7 @@ export function canonicalProblem(input) {
   if (host === 'atcoder.jp' && (m = path.match(/^\/contests\/([a-z0-9_-]+)\/tasks\/([a-z0-9_-]+)$/i))) {
     return { id: `atcoder:${m[2]}`, code: m[2], platform: 'AtCoder', url: `https://atcoder.jp/contests/${m[1]}/tasks/${m[2]}` };
   }
-  throw new Error('暂支持洛谷 P/T/U、QOJ、Codeforces 和 AtCoder 的正式题目链接。');
+  throw new Error('暂支持洛谷 P/B/T/U/CF、QOJ、Codeforces 和 AtCoder 的正式题目链接。');
 }
 
 export function validatePayload(raw) {

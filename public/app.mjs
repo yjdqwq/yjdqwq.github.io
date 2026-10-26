@@ -1,5 +1,6 @@
 import { REPOSITORY, MIN_RANK_VOTES, EXPERIENCES, PURPOSES, TAGS, BANDS, signed, bandFor, toneFor, validatePayload, issueLink, summarize } from './lib.mjs';
 import { selectCatalogue } from './catalogue.mjs';
+import { parseBatchInput, resolveBatch, batchCodesFromURL, batchURL } from './batch.mjs';
 const $ = id => document.getElementById(id);
 const storage = {
   get(key, fallback) { try { return JSON.parse(localStorage.getItem(`problem-notes:${key}`)) ?? fallback; } catch { return fallback; } },
@@ -7,7 +8,8 @@ const storage = {
 };
 const savedFavorites = storage.get('favorites', []);
 const state = { data: { problems: [], reviews: [] }, purpose: 'contest', mode: 'library', hidden: storage.get('hide-scores', false) === true,
-  favorites: new Set(Array.isArray(savedFavorites) ? savedFavorites : []), current: null, score: null, tags: new Set(), loaded: false, page: 1 };
+  favorites: new Set(Array.isArray(savedFavorites) ? savedFavorites : []), current: null, score: null, tags: new Set(), loaded: false, page: 1,
+  batchCodes: null, batchRaw: '' };
 let toastTimer;
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 3500); }
@@ -16,6 +18,73 @@ function reviewsFor(key) { return state.data.reviews.filter(r => r.key === key &
 function scoreLabel(value) { if (state.hidden) return '已隐藏'; return value === null ? '待评' : signed(value, 1); }
 function openDialog(dialog) { if (!dialog.open) dialog.showModal(); }
 function draftKey() { return `draft:${state.current.key}:${state.purpose}`; }
+function batchActive() { return state.batchCodes !== null && state.mode === 'library'; }
+function hasDraftInput(p) { return p && (p.score !== null && p.score !== undefined || p.reason?.trim() || p.spoiler?.trim() || p.experience || p.tags?.length); }
+function saveBatchState() {
+  storage.set('batch-list', { active: state.batchCodes !== null, codes: state.batchCodes || [], raw: state.batchRaw });
+  try { history.replaceState(null, '', batchURL(location.href, state.batchCodes)); } catch { /* File previews may not permit history changes. */ }
+}
+function renderBatchBar(selection) {
+  const active = batchActive(); $('batchSummary').hidden = !active;
+  $('sort').disabled = active; $('sort').options[0].textContent = active ? '输入顺序' : '建档顺序';
+  if (active) {
+    $('sort').value = 'catalogue';
+    $('startBatch').disabled = !state.loaded || !selection.problems.length;
+    $('batchCount').textContent = state.loaded ? `批量清单 · ${selection.problems.length} / ${state.batchCodes.length} 道已找到` : `正在读取 ${state.batchCodes.length} 道题…`;
+    $('batchMissing').replaceChildren();
+    if (state.loaded && selection.missing.length) {
+      $('batchMissing').append(el('span', '', '尚未收录：'));
+      for (const code of selection.missing) {
+        const b = el('button', 'text-button', `收录 ${code}`); b.type = 'button';
+        b.addEventListener('click', () => openAddProblem(code)); $('batchMissing').append(b);
+      }
+    }
+  }
+  $('libraryHeading').textContent = state.mode === 'rank' ? '有评价，才有位置' : active ? '按清单逐题评价' : '找到下一道值得讨论的题';
+}
+function renderBatchNavigation() {
+  const selection = batchActive() ? resolveBatch(state.batchCodes, state.data.problems) : { problems: [] };
+  const index = selection.problems.findIndex(p => p.key === state.current?.key);
+  $('batchNavigation').hidden = index < 0;
+  if (index >= 0) {
+    $('batchPosition').textContent = `清单第 ${index + 1} / ${selection.problems.length} 题`;
+    $('batchPrevious').disabled = index === 0;
+    $('batchNext').textContent = index + 1 < selection.problems.length ? '保存草稿并下一题 →' : '保存本题草稿';
+  }
+}
+function saveCurrentBatchDraft() {
+  if (!batchActive() || !state.current) return true;
+  const payload = currentPayload();
+  return !hasDraftInput(payload) || storage.set(draftKey(), payload);
+}
+function moveBatch(delta) {
+  const selection = resolveBatch(state.batchCodes || [], state.data.problems);
+  const index = selection.problems.findIndex(p => p.key === state.current?.key);
+  if (index < 0) return;
+  if (!saveCurrentBatchDraft()) { toast('草稿保存失败，请先保留当前内容再切换。'); return; }
+  const next = selection.problems[index + delta];
+  if (next) { state.page = Math.floor((index + delta) / Number($('pageSize').value)) + 1; showProblem(next); }
+  else toast('已保存本题草稿。公开评分仍需在 GitHub 确认提交。');
+  renderTable();
+}
+function openAddProblem(code = '') {
+  $('addForm').reset(); $('addError').hidden = true;
+  if (code) $('newUrl').value = `https://www.luogu.com.cn/problem/${code}`;
+  openDialog($('addDialog'));
+}
+function previewBatch() {
+  $('batchParseErrors').replaceChildren();
+  try {
+    const parsed = parseBatchInput($('batchInput').value);
+    const resolved = resolveBatch(parsed.codes, state.data.problems);
+    $('batchPreview').textContent = parsed.codes.length ? `识别 ${parsed.codes.length} 道 · ${resolved.problems.length} 道已收录${parsed.duplicates ? ` · 去重 ${parsed.duplicates} 项` : ''}` : '粘贴题号或洛谷题目链接后，在这里检查识别结果。';
+    for (const e of parsed.errors.slice(0, 8)) $('batchParseErrors').append(el('p', '', `${e.token}：${e.message}`));
+    if (parsed.errors.length) $('batchParseErrors').append(el('p', '', '无法识别的项目不会加入清单，请检查后再继续。'));
+    $('batchApply').disabled = !parsed.codes.length || !state.loaded;
+    return parsed;
+  } catch (error) { $('batchPreview').textContent = error.message; $('batchApply').disabled = true; return null; }
+}
+function openBatchDialog() { $('batchInput').value = state.batchRaw; previewBatch(); openDialog($('batchDialog')); }
 
 function miniature(summary) {
   const chart = el('div', 'mini-chart');
@@ -31,10 +100,13 @@ function miniature(summary) {
 }
 
 function renderTable() {
+  const selection = batchActive() ? resolveBatch(state.batchCodes, state.data.problems) : null;
+  renderBatchBar(selection);
   const result = selectCatalogue(state.data.problems, state.data.reviews, {
     query: $('search').value, platform: $('platform').value, purpose: state.purpose,
     independentOnly: $('independentOnly').checked, favoritesOnly: $('favoritesOnly').checked,
-    favorites: state.favorites, mode: state.mode, sort: $('sort').value, page: state.page, pageSize: $('pageSize').value
+    favorites: state.favorites, mode: state.mode, sort: $('sort').value, page: state.page, pageSize: $('pageSize').value,
+    keys: selection?.keys ?? null
   });
   const { items, total, pages, first, last } = result; state.page = result.page;
   $('problemRows').replaceChildren();
@@ -52,6 +124,7 @@ function renderTable() {
     nameButton.addEventListener('click', () => showProblem(p));
     const description = el('div', 'problem-description');
     description.append(el('span', `platform-pill ${p.platform.toLowerCase()}`, p.platform), el('span', 'source-text', p.source || '社区收录'));
+    if (batchActive() && hasDraftInput(storage.get(`draft:${p.key}:${state.purpose}`, null))) description.append(el('span', 'draft-pill', '本地草稿'));
     nameCell.append(nameButton, description);
     const score = el('td');
     score.append(el('span', !s.n || state.hidden ? 'quality-unrated' : `quality-value ${toneFor(s.mean)}`, scoreLabel(s.mean)));
@@ -169,7 +242,7 @@ function showProblem(problem) {
     $('reason').value = typeof draft.reason === 'string' ? draft.reason : '';
     $('spoiler').value = typeof draft.spoiler === 'string' ? draft.spoiler : '';
   }
-  renderTagChoices(); updateScoreSelection(); openDialog($('problemDialog'));
+  renderTagChoices(); updateScoreSelection(); renderBatchNavigation(); openDialog($('problemDialog'));
 }
 
 async function loadData() {
@@ -180,6 +253,7 @@ async function loadData() {
     const data = await res.json();
     if (data.schema !== 1 || !Array.isArray(data.problems) || !Array.isArray(data.reviews)) throw new Error('数据格式不匹配');
     state.data = data; state.loaded = true; $('updatedAt').textContent = readableDate(data.generatedAt); renderTable(); renderSources();
+    if ($('batchDialog').open) previewBatch();
     if ($('problemDialog').open && state.current) { renderDistribution(reviewsFor(state.current.key)); renderReviews(reviewsFor(state.current.key)); }
   } catch (error) {
     $('loadError').hidden = false; $('loadError').querySelector('p').textContent = `题库暂时无法读取（${error.message}）。请重新加载，或通过 HTTP 静态服务器打开网页。`;
@@ -232,11 +306,27 @@ $('clearFilters').addEventListener('click', () => {
   if (state.mode === 'rank') location.hash = 'library'; else renderTable();
 });
 $('heroReview').addEventListener('click', () => { $('search').focus(); $('search').scrollIntoView({ behavior: 'smooth', block: 'center' }); toast('搜索你想评价的题目，然后打开详情。'); });
-$('addProblem').addEventListener('click', () => { $('addError').hidden = true; openDialog($('addDialog')); });
+$('addProblem').addEventListener('click', () => openAddProblem());
+$('openBatch').addEventListener('click', openBatchDialog); $('editBatch').addEventListener('click', openBatchDialog);
+$('batchInput').addEventListener('input', previewBatch);
+$('batchForm').addEventListener('submit', event => {
+  event.preventDefault(); const parsed = previewBatch(); if (!parsed?.codes.length) return;
+  state.batchCodes = parsed.codes; state.batchRaw = $('batchInput').value; state.page = 1;
+  $('search').value = ''; $('platform').value = ''; $('favoritesOnly').checked = false; $('sort').value = 'catalogue';
+  saveBatchState(); $('batchDialog').close();
+  if (state.mode !== 'library') location.hash = 'library'; else renderTable();
+  $('libraryHeading').scrollIntoView({ block: 'start' });
+});
+$('exitBatch').addEventListener('click', () => { state.batchCodes = null; state.page = 1; saveBatchState(); renderTable(); });
+$('startBatch').addEventListener('click', () => {
+  const first = resolveBatch(state.batchCodes || [], state.data.problems).problems[0]; if (first) showProblem(first); else toast('先收录清单里尚未找到的题目，再刷新数据。');
+});
+$('batchPrevious').addEventListener('click', () => moveBatch(-1)); $('batchNext').addEventListener('click', () => moveBatch(1));
+$('problemDialog').addEventListener('close', () => { if (!saveCurrentBatchDraft()) toast('草稿未能保存，请保留当前内容。'); renderTable(); });
 for (const b of document.querySelectorAll('[data-close]')) b.addEventListener('click', () => $(b.dataset.close).close());
 for (const d of document.querySelectorAll('dialog')) d.addEventListener('click', e => { if (e.target === d) { const r = d.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close(); } });
 for (const id of ['reason', 'spoiler', 'experience']) $(id).addEventListener('input', updateSubmit);
-$('saveDraft').addEventListener('click', () => { toast(storage.set(draftKey(), currentPayload()) ? '草稿已保存，仅存在此浏览器，尚未公开提交。' : '浏览器无法保存草稿，可以下载评分数据。'); });
+$('saveDraft').addEventListener('click', () => { toast(storage.set(draftKey(), currentPayload()) ? '草稿已保存，仅存在此浏览器，尚未公开提交。' : '浏览器无法保存草稿，可以下载评分数据。'); renderTable(); });
 $('downloadReview').addEventListener('click', () => {
   try {
     const p = validatePayload(currentPayload()); const url = URL.createObjectURL(new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' }));
@@ -257,5 +347,12 @@ $('refreshData').addEventListener('click', () => { loadData(); }); $('retryLoad'
 document.addEventListener('keydown', e => { if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { e.preventDefault(); if ($('libraryView').hidden) location.hash = 'library'; $('search').focus(); } });
 window.addEventListener('hashchange', changeView);
 $('previewNotice').hidden = location.hostname === 'yjdqwq.github.io';
+try {
+  const fromURL = batchCodesFromURL(location.href);
+  const saved = storage.get('batch-list', null);
+  const parsed = fromURL ?? (saved?.active && Array.isArray(saved.codes) ? parseBatchInput(saved.codes.join(',')) : null);
+  if (parsed?.codes.length) { state.batchCodes = parsed.codes; state.batchRaw = fromURL ? parsed.codes.join('\n') : typeof saved?.raw === 'string' ? saved.raw : parsed.codes.join('\n'); }
+  else if (typeof saved?.raw === 'string') state.batchRaw = saved.raw;
+} catch (error) { toast(error.message); }
 changeView(); loadData();
 

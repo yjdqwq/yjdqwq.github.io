@@ -5,7 +5,8 @@ const titleOrder = new Intl.Collator('zh-CN', { numeric: true });
 const platformAliases = { '洛谷': 'luogu lg', Codeforces: 'cf', AtCoder: 'at' };
 export function selectCatalogue(problems, reviews, options = {}) {
   const { query = '', platform = '', purpose = 'contest', independentOnly = false, favoritesOnly = false,
-    favorites = new Set(), mode = 'library', sort = 'catalogue', page = 1, pageSize = 25 } = options;
+    favorites = new Set(), mode = 'library', sort = 'catalogue', page = 1, pageSize = 25, keys = null } = options;
+  const inputOrder = keys === null ? null : new Map(keys.map((key, index) => [key, index]));
   const grouped = new Map();
   for (const r of reviews) {
     if (r.purpose !== purpose || (independentOnly && r.experience !== 'independent')) continue;
@@ -16,6 +17,7 @@ export function selectCatalogue(problems, reviews, options = {}) {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   let items = [];
   for (const p of problems) {
+    if (inputOrder && !inputOrder.has(p.key)) continue;
     if ((platform && p.platform !== platform) || (favoritesOnly && !favorites.has(p.key))) continue;
     const s = summaries.get(p.key) || EMPTY_SUMMARY;
     if (mode === 'rank' && s.n < MIN_RANK_VOTES) continue;
@@ -23,8 +25,9 @@ export function selectCatalogue(problems, reviews, options = {}) {
     if (terms.some(t => !text.includes(t))) continue;
     items.push({ p, s });
   }
-  const order = mode === 'rank' && sort === 'catalogue' ? 'score-desc' : sort;
+  const order = inputOrder ? 'batch' : mode === 'rank' && sort === 'catalogue' ? 'score-desc' : sort;
   if (order !== 'catalogue') items.sort((a, b) => {
+    if (order === 'batch') return inputOrder.get(a.p.key) - inputOrder.get(b.p.key);
     if (order === 'title') return titleOrder.compare(a.p.title, b.p.title);
     if (order === 'votes') return b.s.n - a.s.n;
     if (a.s.mean === null) return b.s.mean === null ? 0 : 1;

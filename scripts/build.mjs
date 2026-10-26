@@ -42,7 +42,7 @@ await writeFile(new URL('scoring.md', dist), (await readFile(new URL('SCORING.md
 await cp(new URL('RESEARCH.md', root), new URL('research.md', dist));
 const css = await readFile(new URL('public/styles.css', root), 'utf8');
 const html = await readFile(new URL('public/index.html', root), 'utf8');
-const modulePaths = ['lib.mjs', 'catalogue.mjs', 'app.mjs'];
+const modulePaths = ['lib.mjs', 'catalogue.mjs', 'batch.mjs', 'app.mjs'];
 const modules = await Promise.all(modulePaths.map(path => readFile(new URL(`public/${path}`, root), 'utf8')));
 const assetVersion = createHash('sha256').update(css + html + modules.join('\n')).digest('hex').slice(0, 12);
 // Existing visitors must get the paginated app together with the much larger index.
@@ -52,11 +52,12 @@ for (let i = 0; i < modulePaths.length; i++) {
 }
 const lib = (await readFile(new URL('public/lib.mjs', root), 'utf8')).replace(/^export /gm, '');
 const index = (await readFile(new URL('public/catalogue.mjs', root), 'utf8')).replace(/^import .*from '\.\/lib\.mjs';\n/, '').replace(/^export /gm, '');
+const batch = (await readFile(new URL('public/batch.mjs', root), 'utf8')).replace(/^import .*from '\.\/lib\.mjs';\n/, '').replace(/^export /gm, '');
 const app = (await readFile(new URL('public/app.mjs', root), 'utf8')).replace(/^import .*from '\.\/[^']+';\n/gm, '');
 const embeddedData = JSON.stringify(data).replaceAll('<', '\\u003c');
 const preview = html
   .replace('<link rel="stylesheet" href="./styles.css">', `<style>${css}</style>`)
-  .replace('<script type="module" src="./app.mjs"></script>', `<script>window.PROBLEM_NOTES_PREVIEW_DATA=${embeddedData};</script><script type="module">${(lib + '\n' + index + '\n' + app).replaceAll('</script', '<\\/script')}</script>`);
+  .replace('<script type="module" src="./app.mjs"></script>', `<script>window.PROBLEM_NOTES_PREVIEW_DATA=${embeddedData};</script><script type="module">${(lib + '\n' + index + '\n' + batch + '\n' + app).replaceAll('</script', '<\\/script')}</script>`);
 await writeFile(new URL('preview.html', dist), preview);
 console.log(`Built ${data.problems.length} problems and ${data.reviews.length} active ratings.`);
 
