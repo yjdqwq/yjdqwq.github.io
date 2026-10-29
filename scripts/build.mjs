@@ -1,10 +1,13 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { gunzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
+import { parseArgs } from 'node:util';
 import { buildDataset, REPOSITORY, validateAIAnchors } from '../public/lib.mjs';
 import { mergeCatalogue } from './catalogue.mjs';
 import { bundlePreviewModules } from './preview.mjs';
 import { renderAIAnchorPage } from './ai-anchors.mjs';
+import { readIssueSnapshot } from './issues.mjs';
+const { values: options } = parseArgs({ options: { 'issues-file': { type: 'string' } } });
 const root = new URL('../', import.meta.url);
 const dist = new URL('dist/', root);
 const seed = JSON.parse(await readFile(new URL('public/data/catalogue.json', root), 'utf8'));
@@ -27,7 +30,9 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(new URL('public/', root), dist, { recursive: true });
 let issues = [];
-if (process.env.GH_TOKEN) {
+if (options['issues-file']) {
+  issues = (await readIssueSnapshot(options['issues-file'])).issues;
+} else if (process.env.GH_TOKEN) {
   const repository = process.env.GITHUB_REPOSITORY || REPOSITORY;
   if (repository !== REPOSITORY) throw new Error(`请先在 public/lib.mjs 修改 REPOSITORY；当前是 ${repository}。`);
   for (let page = 1; ; page++) {

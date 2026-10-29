@@ -68,13 +68,16 @@ test('pagination covers every result once and clamps pages after filtering', () 
 test('search, favorites and rating scopes apply before pagination', () => {
   const a = row(1001, '前缀 数据结构'); const b = row(1002, '另一道题');
   const reviews = [
-    ...Array.from({ length: 5 }, () => ({ key: a.key, score: 0, purpose: 'contest', experience: 'independent' })),
+    { key: a.key, score: 0, purpose: 'contest', experience: 'independent' },
     { key: b.key, score: 10, purpose: 'training', experience: 'editorial' }
   ];
   assert.equal(selectCatalogue([a, b], reviews, { query: 'LG P1001 数据' }).total, 1);
   assert.equal(selectCatalogue([a, b], reviews, { platform: 'QOJ' }).total, 0);
   const rank = selectCatalogue([a, b], reviews, { mode: 'rank' });
   assert.equal(rank.total, 1); assert.equal(rank.items[0].s.mean, 0);
+  assert.equal(rank.items[0].s.n, 1);
+  assert.equal(selectCatalogue([a, b], reviews, { mode: 'rank', purpose: 'training' }).items[0].p.key, b.key);
+  assert.equal(selectCatalogue([a, b], reviews, { mode: 'rank', purpose: 'training', independentOnly: true }).total, 0);
   assert.equal(selectCatalogue([a, b], reviews, { purpose: 'training', independentOnly: true }).items[1].s.mean, null);
   assert.equal(selectCatalogue([a, b], reviews, { favoritesOnly: true, favorites: new Set([b.key]) }).items[0].p.key, b.key);
 });

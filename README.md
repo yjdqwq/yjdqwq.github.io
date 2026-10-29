@@ -8,7 +8,7 @@
 
 ## 评分规则
 
-质量 −10～10，0 为一般题。无评分显示待评。难度不参与质量计算。完整设计见 [SCORING.md](SCORING.md)，调研来源见 [RESEARCH.md](RESEARCH.md)。初始题库没有任何人类投票，也未导入其他站的净赞踩或难度标签。
+质量 −10～10，0 为一般题。有 1 位有效评价者即显示分数并进入对应用途的榜单；无评分显示待评。难度不参与质量计算。完整设计见 [SCORING.md](SCORING.md)，调研来源见 [RESEARCH.md](RESEARCH.md)。初始题库没有任何人类投票，也未导入其他站的净赞踩或难度标签。
 
 ## AI 参考评分
 
@@ -38,6 +38,15 @@ npm run build
 ```
 
 用任意静态服务器托管 `dist/`。直接双击 HTML 的 file 协议不支持读取评分 JSON。无 `GH_TOKEN` 的本地构建使用已保存题库，评分为空。
+
+也可以使用下载的 Issues 快照离线核对和构建。快照格式为 `{ "repository": "yjdqwq/yjdqwq.github.io", "downloadedAt": "2026-10-29", "issues": [...] }`，`issues` 保留 GitHub API 的原始元数据与正文，并完整下载 `state=all` 的所有分页，以保留关闭记录的撤回语义。
+
+```sh
+npm run audit:issues -- .cache/issues-2026-10-29.json
+npm run build -- --issues-file .cache/issues-2026-10-29.json
+```
+
+核对命令在原文件旁输出 `.audit.json`（解析状态、有效人数、按题及用途汇总）和 `.ratings.json`（逐条有效评分，含作者与原 Issue 链接）。批量记录按题展开，缺少理由不丢分，0 分照常计入；同账号／版本／用途仍仅取最新记录。无效、关闭、被排除和被较新记录覆盖的内容不转成新投票，也不自动修改远端 Issues。AI 参考保持分离。下载文件放在已忽略的 `.cache/` 内，避免把本地备份当成持续更新的数据源推送；线上发布继续从 GitHub 实时拉取。
 
 ## 批量题库与更新
 

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "build": "node scripts/build.mjs",
-    "sync:catalogue": "node scripts/sync-catalogue.mjs"
+    "sync:catalogue": "node scripts/sync-catalogue.mjs",
+    "audit:issues": "node scripts/audit-issues.mjs"
   },
   "engines": { "node": ">=22" }
 }

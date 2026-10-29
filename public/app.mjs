@@ -278,7 +278,7 @@ function renderDistribution(reviews) {
       container.append(column);
     });
   }
-  $('detailSampleNote').textContent = !s.n ? '目前没有有效评价。待评没有默认分数，你可以成为第一位评价者。' : s.n < MIN_RANK_VOTES ? `只有 ${s.n} 位评价者，尚未达到榜单门槛。分数只是当前样本的摘要。` : '均值、中位数和分布描述当前样本，不代表所有选手的共识。';
+  $('detailSampleNote').textContent = !s.n ? '目前没有有效评价。待评没有默认分数，你可以成为第一位评价者。' : s.n === 1 ? '目前有 1 位评价者，分数代表这位评价者的判断。' : '均值、中位数和分布描述当前样本，不代表所有选手的共识。';
 }
 
 function renderReviews(reviews) {

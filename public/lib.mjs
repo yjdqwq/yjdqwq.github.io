@@ -1,5 +1,5 @@
 export const REPOSITORY = 'yjdqwq/yjdqwq.github.io';
-export const MIN_RANK_VOTES = 5;
+export const MIN_RANK_VOTES = 1;
 export const MAX_BATCH_REVIEWS = 500;
 export const MAX_ISSUE_BODY_BYTES = 60000;
 export const MAX_ISSUE_URL_LENGTH = 7000;
