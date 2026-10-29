@@ -1,0 +1,296 @@
+{
+  "schema": 1,
+  "repository": "yjdqwq/yjdqwq.github.io",
+  "downloadedAt": "2026-10-29",
+  "snapshotDate": "2026-10-29",
+  "issues": [
+    {
+      "number": 18,
+      "title": "[评分] [NOI2024] 登山",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P10789\",\n  \"problemTitle\": \"[NOI2024] 登山\",\n  \"version\": \"public-v1\",\n  \"score\": -1,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"思维上没啥意思，要转成差分对差分的贡献，然后倍增一车东西，虽然对着暴力调很稳，但是代码感觉很丑\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T13:09:09Z",
+      "updated_at": "2026-10-29T13:09:09Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/18",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 17,
+      "title": "[批量评分] 72 道题",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。编辑整批会更新其中所有评分；关闭此 Issue 即撤回本批评分。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\"schema\":1,\"type\":\"review-batch\",\"purpose\":\"contest\",\"version\":\"public-v1\",\"reviews\":[{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2048\",\"problemTitle\":\"[NOI2010] 超级钢琴\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2056\",\"problemTitle\":\"[ZJOI2007] 捉迷藏\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2487\",\"problemTitle\":\"[SDOI2011] 拦截导弹\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2495\",\"problemTitle\":\"【模板】虚树 / [SDOI2011] 消耗战\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2612\",\"problemTitle\":\"[ZJOI2012] 波浪\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2757\",\"problemTitle\":\"[国家集训队] 等差子序列\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3206\",\"problemTitle\":\"[HNOI2010] 城市建设\",\"score\":2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3227\",\"problemTitle\":\"[HNOI2013] 切糕\",\"score\":6,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3266\",\"problemTitle\":\"[JLOI2015] 骗我呢\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3328\",\"problemTitle\":\"[SDOI2015] 音质检测\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3338\",\"problemTitle\":\"[ZJOI2014] 力\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3345\",\"problemTitle\":\"[ZJOI2015] 幻想乡战略游戏\",\"score\":-1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3349\",\"problemTitle\":\"[ZJOI2016] 小星星\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3359\",\"problemTitle\":\"改造异或树\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3604\",\"problemTitle\":\"美好的每一天\",\"score\":1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3647\",\"problemTitle\":\"[APIO2014] 连珠线\",\"score\":1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3649\",\"problemTitle\":\"[APIO2014] 回文串\",\"score\":1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4151\",\"problemTitle\":\"[WC2011] 最大 XOR 和路径\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4168\",\"problemTitle\":\"[Violet] 蒲公英\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4719\",\"problemTitle\":\"【模板】动态 DP\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4721\",\"problemTitle\":\"【模板】分治 FFT\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4725\",\"problemTitle\":\"【模板】多项式对数函数（多项式 ln）\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4726\",\"problemTitle\":\"【模板】多项式指数函数（多项式 exp）\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4735\",\"problemTitle\":\"最大异或和\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4980\",\"problemTitle\":\"【模板】Pólya（Polya）定理\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4983\",\"problemTitle\":\"忘情\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5046\",\"problemTitle\":\"[Ynoi2019 模拟赛] Yuno loves sqrt technology I\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5048\",\"problemTitle\":\"[Ynoi2019 模拟赛] Yuno loves sqrt technology III\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5170\",\"problemTitle\":\"【模板】类欧几里德算法\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5192\",\"problemTitle\":\"Shoot the Bullet | 东方文花帖\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5205\",\"problemTitle\":\"【模板】多项式开根\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5245\",\"problemTitle\":\"【模板】多项式快速幂\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5273\",\"problemTitle\":\"【模板】多项式幂函数（加强版）\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5277\",\"problemTitle\":\"【模板】多项式开根（加强版）\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5278\",\"problemTitle\":\"算术天才⑨与等差数列\",\"score\":-1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5305\",\"problemTitle\":\"[GXOI/GZOI2019] 旧词\",\"score\":2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5325\",\"problemTitle\":\"【模板】Min_25 筛\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5443\",\"problemTitle\":\"[APIO2019] 桥梁\",\"score\":1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5491\",\"problemTitle\":\"【模板】二次剩余\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5494\",\"problemTitle\":\"【模板】线段树分裂\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5666\",\"problemTitle\":\"[CSP-S 2019] 树的重心\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5904\",\"problemTitle\":\"[POI 2014] HOT-Hotels 加强版\",\"score\":1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5998\",\"problemTitle\":\"[PA 2014] Plemiona\",\"score\":2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6000\",\"problemTitle\":\"[CEOI 2016] match\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6097\",\"problemTitle\":\"【模板】子集卷积\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6137\",\"problemTitle\":\"[IOI 2012] 理想城\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6178\",\"problemTitle\":\"【模板】Matrix-Tree 定理\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6192\",\"problemTitle\":\"【模板】最小斯坦纳树\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6326\",\"problemTitle\":\"Shopping\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6657\",\"problemTitle\":\"【模板】LGV 引理\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6846\",\"problemTitle\":\"[CEOI 2019] Amusement Park\",\"score\":2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6958\",\"problemTitle\":\"[NEERC 2017] The Great Wall\",\"score\":-3,\"experience\":\"independent\",\"reason\":\"没啥难度，洛谷居然给紫，实际感觉青\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7093\",\"problemTitle\":\"[CERC2014] Can't stop playing\",\"score\":0,\"experience\":\"independent\",\"reason\":\"观察一个性质就做完了，不是特别有意思\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7597\",\"problemTitle\":\"「EZEC-8」猜树 加强版\",\"score\":2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7603\",\"problemTitle\":\"[THUPC 2021] 鬼街\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7710\",\"problemTitle\":\"[Ynoi2077] stdmxeypz\",\"score\":-1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7769\",\"problemTitle\":\"「CGOI-1」大师选徒\",\"score\":2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7962\",\"problemTitle\":\"[NOIP2021] 方差\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7967\",\"problemTitle\":\"[COCI 2021/2022 #2] Magneti\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8569\",\"problemTitle\":\"[JRKSJ R6] 第七学区\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8819\",\"problemTitle\":\"[CSP-S 2022] 星战\",\"score\":2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8866\",\"problemTitle\":\"[NOIP2022] 喵了个喵\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8868\",\"problemTitle\":\"[NOIP2022] 比赛\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P9169\",\"problemTitle\":\"[省选联考 2023] 过河卒\",\"score\":-2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P9870\",\"problemTitle\":\"[NOIP2023] 双序列拓展\",\"score\":3,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P10149\",\"problemTitle\":\"[Ynoi1999] XM66F\",\"score\":-1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P10218\",\"problemTitle\":\"[省选联考 2024] 魔法手杖\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P10220\",\"problemTitle\":\"[省选联考 2024] 迷宫守卫\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P11957\",\"problemTitle\":\"「ZHQOI R1」幂和\",\"score\":2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P13597\",\"problemTitle\":\"『GTOI - 1D』回归空白\",\"score\":1,\"experience\":\"independent\",\"reason\":\"前面计数还算可以，后面的数据结构细节有点多，而且有点卡常，但是有人2log过\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P14364\",\"problemTitle\":\"[CSP-S 2025] 员工招聘\",\"score\":3,\"experience\":\"independent\",\"reason\":\"可以按照值确定，也可以直接容斥答案形态，并有不同的难写程度和代码常数\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P14470\",\"problemTitle\":\"[COCI 2025/2026 #1] 松鼠 / Zagi\",\"score\":-2,\"experience\":\"independent\",\"reason\":\"做法比较显然，多log都被卡，没啥意思\"}]}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T07:27:13Z",
+      "updated_at": "2026-10-29T07:27:13Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/17",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 16,
+      "title": "[批量评分] 72 道题",
+      "state": "closed",
+      "body": null,
+      "labels": [],
+      "created_at": "2026-10-29T07:26:07Z",
+      "updated_at": "2026-10-29T07:26:59Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/16",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 15,
+      "title": "[评分] [JOIST 2022] 京都观光 / Sightseeing in Kyoto",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P9521\",\n  \"problemTitle\": \"[JOIST 2022] 京都观光 / Sightseeing in Kyoto\",\n  \"version\": \"public-v1\",\n  \"score\": 8,\n  \"experience\": \"editorial\",\n  \"purpose\": \"contest\",\n  \"reason\": \"\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T06:16:14Z",
+      "updated_at": "2026-10-29T06:16:14Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/15",
+      "user": {
+        "id": 308718407,
+        "login": "dvsfanjo",
+        "type": "User"
+      }
+    },
+    {
+      "number": 14,
+      "title": "[评分] [CSP-S 2025] 道路修复",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P14362\",\n  \"problemTitle\": \"[CSP-S 2025] 道路修复\",\n  \"version\": \"public-v1\",\n  \"score\": 0,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"只要观察到一个性质之后不用正解也能过，垃圾\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T05:53:49Z",
+      "updated_at": "2026-10-29T05:53:49Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/14",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 13,
+      "title": "[评分] [CSP-S 2025] 员工招聘",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P14364\",\n  \"problemTitle\": \"[CSP-S 2025] 员工招聘\",\n  \"version\": \"public-v1\",\n  \"score\": 3,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"可以按照值确定，也可以直接容斥答案形态，并有不同的难写程度和代码常数\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T05:52:52Z",
+      "updated_at": "2026-10-29T05:52:52Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/13",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 12,
+      "title": "[评分] [CSP-S 2025] 谐音替换",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P14363\",\n  \"problemTitle\": \"[CSP-S 2025] 谐音替换\",\n  \"version\": \"public-v1\",\n  \"score\": 3,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"做法有点多，我有一个不用观察啥性质的做法\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T05:51:58Z",
+      "updated_at": "2026-10-29T05:51:58Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/12",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 11,
+      "title": "[评分] 『GTOI - 1D』回归空白",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P13597\",\n  \"problemTitle\": \"『GTOI - 1D』回归空白\",\n  \"version\": \"public-v1\",\n  \"score\": 1,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"前面计数还算可以，后面的数据结构细节有点多，而且有点卡常，但是有人2log过\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-29T05:49:20Z",
+      "updated_at": "2026-10-29T05:49:20Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/11",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 10,
+      "title": "[批量评分] 14 道题",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。编辑整批会更新其中所有评分；关闭此 Issue 即撤回本批评分。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\"schema\":1,\"type\":\"review-batch\",\"purpose\":\"contest\",\"version\":\"public-v1\",\"reviews\":[{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2831\",\"problemTitle\":\"[NOIP 2016 提高组] 愤怒的小鸟\",\"score\":-2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3942\",\"problemTitle\":\"将军令\",\"score\":1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4171\",\"problemTitle\":\"[JSOI2010] 满汉全席\",\"score\":3,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4344\",\"problemTitle\":\"[SHOI2015] 脑洞治疗仪\",\"score\":-1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4513\",\"problemTitle\":\"小白逛公园\",\"score\":2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6327\",\"problemTitle\":\"区间加区间 sin 和\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6574\",\"problemTitle\":\"[BalticOI 2017] Cat in a tree\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P9753\",\"problemTitle\":\"[CSP-S 2023] 消消乐\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P11049\",\"problemTitle\":\"[IOI 2024] 尼罗河船运\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P11361\",\"problemTitle\":\"[NOIP2024] 编辑字符串\",\"score\":-1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P11830\",\"problemTitle\":\"[省选联考 2025] 幸运数字\",\"score\":1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P15410\",\"problemTitle\":\"「TBOI Round 1」Niton & Matrix\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P15411\",\"problemTitle\":\"「TBOI Round 1」Niton & Killaura\",\"score\":-1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P15652\",\"problemTitle\":\"[省选联考 2026] 排列游戏\",\"score\":3,\"experience\":\"editorial\"}]}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:33:01Z",
+      "updated_at": "2026-10-28T08:33:01Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/10",
+      "user": {
+        "id": 215780543,
+        "login": "yjdqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 9,
+      "title": "[批量评分] 40 道题",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。编辑整批会更新其中所有评分；关闭此 Issue 即撤回本批评分。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\"schema\":1,\"type\":\"review-batch\",\"purpose\":\"contest\",\"version\":\"public-v1\",\"reviews\":[{\"problemUrl\":\"https://www.luogu.com.cn/problem/P1864\",\"problemTitle\":\"[NOI2009] 二叉查找树\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P1912\",\"problemTitle\":\"[NOI2009] 诗人小G\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P1919\",\"problemTitle\":\"【模板】高精度乘法 / A*B Problem 升级版\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2042\",\"problemTitle\":\"[NOI2005] 维护数列\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2048\",\"problemTitle\":\"[NOI2010] 超级钢琴\",\"score\":6,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2762\",\"problemTitle\":\"太空飞行计划问题\",\"score\":3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2764\",\"problemTitle\":\"最小路径覆盖问题\",\"score\":1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3592\",\"problemTitle\":\"[POI 2015 R3] 洗车 Car washes\",\"score\":4,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3674\",\"problemTitle\":\"小清新人渣的本愿\",\"score\":1,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3803\",\"problemTitle\":\"【模板】多项式乘法（FFT）\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4099\",\"problemTitle\":\"[HEOI2013] SAO\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4211\",\"problemTitle\":\"[LNOI2014] LCA\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4238\",\"problemTitle\":\"【模板】多项式乘法逆\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4262\",\"problemTitle\":\"[Code+#3] 白金元首与莫斯科\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4313\",\"problemTitle\":\"文理分科\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4721\",\"problemTitle\":\"【模板】分治 FFT\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4735\",\"problemTitle\":\"最大异或和\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4767\",\"problemTitle\":\"[IOI 2000] 邮局 加强版\",\"score\":5,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4887\",\"problemTitle\":\"【模板】莫队二次离线 / 第十四分块(前体)\",\"score\":-1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4983\",\"problemTitle\":\"忘情\",\"score\":6,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5278\",\"problemTitle\":\"算术天才⑨与等差数列\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5308\",\"problemTitle\":\"[COCI 2018/2019 #4] Akvizna\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5355\",\"problemTitle\":\"[Ynoi Easy Round 2017] 由乃的玉米田\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5356\",\"problemTitle\":\"[Ynoi Easy Round 2017] 由乃打扑克\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5397\",\"problemTitle\":\"[Ynoi2018] 天降之物\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5610\",\"problemTitle\":\"[Ynoi2013] 大学\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5633\",\"problemTitle\":\"最小度限制生成树\",\"score\":4,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6047\",\"problemTitle\":\"丝之割\",\"score\":7,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6178\",\"problemTitle\":\"【模板】Matrix-Tree 定理\",\"score\":0,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6242\",\"problemTitle\":\"【模板】线段树 3（区间最值操作、区间历史最值）\",\"score\":-2,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6329\",\"problemTitle\":\"【模板】点分树 / 震波\",\"score\":-1,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8659\",\"problemTitle\":\"[蓝桥杯 2017 国 A] 数组操作\",\"score\":-3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8819\",\"problemTitle\":\"[CSP-S 2022] 星战\",\"score\":0,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P8820\",\"problemTitle\":\"[CSP-S 2022] 数据传输\",\"score\":2,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P9169\",\"problemTitle\":\"[省选联考 2023] 过河卒\",\"score\":-3,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P10509\",\"problemTitle\":\"停车场\",\"score\":-3,\"experience\":\"editorial\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P11831\",\"problemTitle\":\"[省选联考 2025] 追忆\",\"score\":-10,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P14364\",\"problemTitle\":\"[CSP-S 2025] 员工招聘\",\"score\":5,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P15061\",\"problemTitle\":\"琥峪枫\",\"score\":3,\"experience\":\"independent\"},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P15412\",\"problemTitle\":\"「TBOI Round 1」Niton & Galgame\",\"score\":1,\"experience\":\"independent\"}]}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:27:53Z",
+      "updated_at": "2026-10-28T08:27:53Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/9",
+      "user": {
+        "id": 215780543,
+        "login": "yjdqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 8,
+      "title": "[评分] [COCI 2025/2026 #1] 松鼠 / Zagi",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P14470\",\n  \"problemTitle\": \"[COCI 2025/2026 #1] 松鼠 / Zagi\",\n  \"version\": \"public-v1\",\n  \"score\": -2,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"做法比较显然，多log都被卡，没啥意思\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:22:38Z",
+      "updated_at": "2026-10-28T08:22:38Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/8",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 7,
+      "title": "[评分] [NEERC 2017] The Great Wall",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P6958\",\n  \"problemTitle\": \"[NEERC 2017] The Great Wall\",\n  \"version\": \"public-v1\",\n  \"score\": -3,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"没啥难度，洛谷居然给紫，实际感觉青\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:21:18Z",
+      "updated_at": "2026-10-28T08:21:18Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/7",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 6,
+      "title": "[评分] [CERC2014] Can't stop playing",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P7093\",\n  \"problemTitle\": \"[CERC2014] Can't stop playing\",\n  \"version\": \"public-v1\",\n  \"score\": 0,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"观察一个性质就做完了，不是特别有意思\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:20:42Z",
+      "updated_at": "2026-10-28T08:20:42Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/6",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 5,
+      "title": "[评分] [ICPC 2015 WF] Evolution in Parallel",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P6908\",\n  \"problemTitle\": \"[ICPC 2015 WF] Evolution in Parallel\",\n  \"version\": \"public-v1\",\n  \"score\": 3,\n  \"experience\": \"independent\",\n  \"purpose\": \"training\",\n  \"reason\": \"感觉做难了，但是思路挺好的\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:19:53Z",
+      "updated_at": "2026-10-28T08:19:53Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/5",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 4,
+      "title": "[批量评分] 45 道题",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。编辑整批会更新其中所有评分；关闭此 Issue 即撤回本批评分。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\"schema\":1,\"type\":\"review-batch\",\"purpose\":\"contest\",\"experience\":\"editorial\",\"version\":\"public-v1\",\"reviews\":[{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6246\",\"problemTitle\":\"[IOI 2000] 邮局 加强版 加强版\",\"score\":7},{\"problemUrl\":\"https://www.luogu.com.cn/problem/B3607\",\"problemTitle\":\"[图论与代数结构 502] 网络流_2\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P1345\",\"problemTitle\":\"[USACO5.4] 奶牛的电信 Telecowmunication\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2120\",\"problemTitle\":\"[ZJOI2007] 仓库建设\",\"score\":2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2149\",\"problemTitle\":\"[SDOI2009] Elaxia的路线\",\"score\":2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2151\",\"problemTitle\":\"[SDOI2009] HH 去散步\",\"score\":4},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2257\",\"problemTitle\":\"YY的GCD\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2596\",\"problemTitle\":\"[ZJOI2006] 书架\",\"score\":2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2619\",\"problemTitle\":\"[国家集训队] Tree I\",\"score\":6},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P2740\",\"problemTitle\":\"[USACO4.2] 草地排水 Drainage Ditches\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3195\",\"problemTitle\":\"[HNOI2008] 玩具装箱\",\"score\":4},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3237\",\"problemTitle\":\"[HNOI2014] 米特运输\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3295\",\"problemTitle\":\"[SCOI2016] 萌萌哒\",\"score\":4},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3369\",\"problemTitle\":\"【模板】普通平衡树\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3376\",\"problemTitle\":\"【模板】网络最大流\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3380\",\"problemTitle\":\"【模板】树套树\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3384\",\"problemTitle\":\"【模板】重链剖分 / 树链剖分\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3391\",\"problemTitle\":\"【模板】文艺平衡树\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3628\",\"problemTitle\":\"[APIO2010] 特别行动队\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3792\",\"problemTitle\":\"由乃与大母神原型和偶像崇拜\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3793\",\"problemTitle\":\"由乃救爷爷\",\"score\":-1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3796\",\"problemTitle\":\"AC 自动机（简单版 II）\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3806\",\"problemTitle\":\"【模板】点分治\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3808\",\"problemTitle\":\"AC 自动机（简单版）\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3809\",\"problemTitle\":\"【模板】后缀排序（SA）\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3810\",\"problemTitle\":\"【模板】三维偏序 / 陌上花开\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3834\",\"problemTitle\":\"【模板】可持久化线段树 2（静态区间第 k 小）\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P3934\",\"problemTitle\":\"[Ynoi Easy Round 2016] 炸脖龙 I\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4097\",\"problemTitle\":\"【模板】李超线段树 / [HEOI2013] Segment\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4314\",\"problemTitle\":\"CPU 监控\",\"score\":7},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4360\",\"problemTitle\":\"[CEOI 2004] 锯木厂选址\",\"score\":2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4597\",\"problemTitle\":\"序列 sequence\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P4630\",\"problemTitle\":\"[APIO2018] 铁人两项\",\"score\":6},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5357\",\"problemTitle\":\"【模板】AC 自动机\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5664\",\"problemTitle\":\"[CSP-S 2019] Emiya 家今天的饭\",\"score\":2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5787\",\"problemTitle\":\"【模板】线段树分治 / 二分图\",\"score\":2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P5903\",\"problemTitle\":\"【模板】树上 K 级祖先\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6136\",\"problemTitle\":\"【模板】普通平衡树（数据加强版）\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P6619\",\"problemTitle\":\"[省选联考 2020 A/B 卷] 冰火战士\",\"score\":5},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P7883\",\"problemTitle\":\"平面最近点对（加强加强版）\",\"score\":1},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P9754\",\"problemTitle\":\"[CSP-S 2023] 结构体\",\"score\":-2},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P9755\",\"problemTitle\":\"[CSP-S 2023] 种树\",\"score\":0},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P11833\",\"problemTitle\":\"[省选联考 2025] 推箱子\",\"score\":4},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P14363\",\"problemTitle\":\"[CSP-S 2025] 谐音替换\",\"score\":5},{\"problemUrl\":\"https://www.luogu.com.cn/problem/P14420\",\"problemTitle\":\"[JOISC 2014] 历史的研究 / Historical Research\",\"score\":1}]}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-28T08:17:45Z",
+      "updated_at": "2026-10-28T08:17:45Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/4",
+      "user": {
+        "id": 215780543,
+        "login": "yjdqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 3,
+      "title": "[评分] [NOI 2026] 布丁",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P17142\",\n  \"problemTitle\": \"[NOI 2026] 布丁\",\n  \"version\": \"public-v1\",\n  \"score\": -10,\n  \"experience\": \"independent\",\n  \"purpose\": \"contest\",\n  \"reason\": \"垃圾题目，知道不是用脑构造之后，随便做一做就有大把分数甚至能过，不理解为什么这道题目配放在这个位置，数据删除\",\n  \"spoiler\": \"\",\n  \"tags\": [\n    \"资源设置欠妥\"\n  ]\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-26T12:00:13Z",
+      "updated_at": "2026-10-26T12:00:13Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/3",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    },
+    {
+      "number": 2,
+      "title": "[评分] [NOIP2025] 序列询问",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://www.luogu.com.cn/problem/P14638\",\n  \"problemTitle\": \"[NOIP2025] 序列询问\",\n  \"version\": \"public-v1\",\n  \"score\": 9,\n  \"experience\": \"editorial\",\n  \"purpose\": \"contest\",\n  \"reason\": \"分治结构很有启发，发现复杂度和R/L挂钩之后的值域分块也很妙\",\n  \"spoiler\": \"\",\n  \"tags\": [\n    \"模型自然\",\n    \"观察有趣\"\n  ]\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-26T00:34:50Z",
+      "updated_at": "2026-10-26T00:34:50Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/2",
+      "user": {
+        "id": 348056087,
+        "login": "Solwek",
+        "type": "User"
+      }
+    },
+    {
+      "number": 1,
+      "title": "[评分] 树的价值",
+      "state": "open",
+      "body": "由题评网页生成。请保留下面的数据块；你可以修改后重新提交。关闭此 Issue 即撤回这条记录。\n\n<!-- problem-notes:v1 -->\n\n```json\n{\n  \"schema\": 1,\n  \"type\": \"review\",\n  \"problemUrl\": \"https://qoj.ac/problem/15459\",\n  \"problemTitle\": \"树的价值\",\n  \"version\": \"public-v1\",\n  \"score\": 10,\n  \"experience\": \"editorial\",\n  \"purpose\": \"contest\",\n  \"reason\": \"很牛逼的题目，没有任何一步是naive/trash\",\n  \"spoiler\": \"\",\n  \"tags\": []\n}\n```\n",
+      "labels": [],
+      "created_at": "2026-10-25T13:41:00Z",
+      "updated_at": "2026-10-25T13:41:00Z",
+      "comments": 0,
+      "html_url": "https://github.com/yjdqwq/yjdqwq.github.io/issues/1",
+      "user": {
+        "id": 263549543,
+        "login": "sxmqwq",
+        "type": "User"
+      }
+    }
+  ]
+}

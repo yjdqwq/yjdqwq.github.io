@@ -95,3 +95,48 @@
   .anchor-table .anchor-score { font-size: 19px; }
   .anchor-confidence { font-size: 10px; }
 }
+
+/* Refreshed standards and feedback navigation. */
+.guide-refresh { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 24px; background: var(--brand-soft); border: 1px solid #dfe6ff; border-radius: 9px; }
+.guide-refresh p { margin-top: 7px; max-width: 780px; color: #586b92; font-size: 12px; line-height: 1.9; }
+.guide-refresh > a { flex-shrink: 0; font-size: 12px; }
+.guide-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 24px; }
+.guide-links a { font-size: 12px; }
+@media (min-width: 851px) and (max-width: 1200px) {
+  .header-inner { gap: 28px; }
+  .header-inner nav { gap: 20px; }
+  .header-actions { gap: 12px; }
+}
+@media (max-width: 850px) {
+  .guide-refresh { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .header-inner nav { gap: 14px; }
+}
+@media (max-width: 650px) {
+  .header-inner nav { gap: 8px; }
+  .header-inner nav > a { font-size: 10px; white-space: nowrap; }
+  .guide-refresh { padding: 17px; }
+  .guide-refresh p { font-size: 12px; }
+  .guide-links { gap: 12px 18px; }
+}
+@media (max-width: 420px) {
+  .criteria-grid { grid-template-columns: 1fr; }
+}
+
+/* Keep historical AI scores and human feedback visually distinct. */
+.anchor-page .table-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+.anchor-table { min-width: 780px; table-layout: fixed; }
+.anchor-table th:first-child { width: 25%; }
+.anchor-table th:nth-child(2) { width: 100px; }
+.anchor-table th:nth-child(3) { width: 31%; }
+.anchor-table td { overflow-wrap: anywhere; }
+.anchor-human { background: #f8fafc; }
+.anchor-human > p { margin: 5px 0 10px; color: #748099; font-size: 10px; }
+.anchor-human-score { display: inline-block; font-size: 21px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.anchor-feedback-status { display: inline-block; margin-top: 10px; padding: 3px 7px; border-radius: 4px; background: #edf1ff; color: #4a6095; font-size: 10px; line-height: 1.7; }
+.anchor-toolbar #anchorFeedback { min-width: 142px; }
+@media (max-width: 650px) {
+  .anchor-table th:first-child { width: 24%; }
+  .anchor-table th:nth-child(2) { width: 82px; }
+  .anchor-table th:nth-child(3) { width: 32%; }
+  .anchor-human-score { font-size: 19px; }
+}

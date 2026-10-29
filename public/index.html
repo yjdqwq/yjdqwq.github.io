@@ -19,6 +19,7 @@
         <a href="#rank" data-view="rank">榜单</a>
         <a href="#guide" data-view="guide">评分标准</a>
         <a href="#research" data-view="research">研究依据<span class="nav-dot"></span></a>
+        <a href="./feedback.html">反馈校准</a>
         <a href="./ai-anchors.html">AI 参考</a>
       </nav>
       <div class="header-actions"><button id="hideScores" class="text-button eye-button" aria-pressed="false">◉ 隐藏评分</button><a class="github-link" href="https://github.com/yjdqwq/yjdqwq.github.io" target="_blank" rel="noopener noreferrer" aria-label="查看 GitHub 项目">GitHub ↗</a></div>
@@ -72,8 +73,48 @@
     </section>
 
     <section id="guideView" class="view-section document-view" hidden>
-      <div class="document-top"><p class="eyebrow">SCORING STANDARD · V1.0</p><h1>分数很短，<em>理由可以更长。</em></h1><p>−10～10 是整体质量判断。0 为同用途的一般题，未评分保持未知。只打分也正常计票，理由、标签和剧透均为选填。</p></div>
-      <div class="document-layout"><div class="document-main"><h2>先选用途，再讨论质量</h2><p>比赛里解题的体验，与用一道题学习新方法的体验，可以不同。本站将“竞赛体验”和“学习训练”分别统计；简单题、模板题、交互题，都按实际用途讨论。</p><h2>21 个分数，9 个参考区间</h2><div id="bandsTable" class="bands-table"></div><h2>总分由你判断，理由提供依据</h2><div class="criteria-grid"><article><span>01 / INSIGHT</span><h3>洞察与趣味</h3><p>关键观察改变了什么？是有意思的结构发现，还是普通的工具整理？</p></article><article><span>02 / MODEL</span><h3>模型与自然性</h3><p>规则是否共同服务于问题？通向经典模型的归约，也可以就是亮点。</p></article><article><span>03 / RETURN</span><h3>完成成本与回报</h3><p>阅读、证明、分类和实现的成本，换来了什么？有优点也可能整体得负分。</p></article><article><span>04 / EXPERIENCE</span><h3>表达与可用性</h3><p>定义、样例、部分分与资源设置是否合理？未检查的部分请保留未知。</p></article></div><p class="rule-callout">这些是写评语的提示，不是自动加权公式。“正确、可解、能练工具”不足以自动获得正分；“难、长、用了某种算法”也不足以自动扣分。</p><h2>每一条记录如何参与统计</h2><ul class="prose-list"><li>独立完成或参考题解并理解做法后，可提交总评分。只打分也计票，理由为选填；经历为自报，本站不冒称 AC 认证。</li><li>同一 GitHub 账号、同一题目版本、同一用途只计最后更新的一条记录。修改版本不沿用旧评分。</li><li>显示均值、中位数、人数和完整分布。少于 5 人仍展示，但不进入榜单；5 人也不表示结果已具有统计可靠性。</li><li>支持多题合并提交；编辑整批会更新其中所有评分，关闭整批可撤回本批的最新记录。关闭最新记录可撤回该账号的评分。管理员可排除不合规记录，并应说明原因。账号限制不能完全防止小号刷分。</li><li>剧透在详情里折叠展示。公开提交会保留 GitHub 身份；草稿只存在本浏览器。</li></ul><a class="inline-link" href="./scoring.md" target="_blank" rel="noopener">阅读可下载的完整标准 ↗</a></div><aside class="document-aside"><div class="note-card"><span class="small-label">THREE DIFFERENT THINGS</span><h3>质量 / 难度 / 收藏</h3><p>质量讨论题目好不好。<br>难度讨论完成它有多难。<br>收藏记录你想不想再看。</p><p>本站收藏仅保存在浏览器，不参与质量分。没有核实的平台难度，保持未知。</p></div><div class="quiet-card"><h3>题目出错了？</h3><p>题意、数据、判题或时限的明确问题，请另附可复核材料反馈。低分不能代替故障说明。</p><a id="reportIssue" class="inline-link" target="_blank" rel="noopener noreferrer" href="https://github.com/yjdqwq/yjdqwq.github.io/issues/new">提交问题反馈 ↗</a></div></aside></div>
+      <div class="document-top"><p class="eyebrow">SCORING STANDARD · V1.1 · 2026.10.29</p><h1>从一般题出发，<em>看具体的收获。</em></h1><p>−10～10 是整体质量判断。0 为同用途的一般题，未评分保持未知。只打分也正常计票，理由、标签和剧透均为选填。</p></div>
+      <div class="guide-refresh"><div><span class="small-label">本次标准更新</span><p>根据本站 Issues 的评分与评语，细化一般题的基准、洞察与实现的回报，以及反馈的使用边界。原始人类评分保持原样，分歧继续保留。</p></div><a class="inline-link" href="./feedback.html">查看反馈汇总与案例 →</a></div>
+      <div class="document-layout">
+        <div class="document-main">
+          <h2>先选用途，再讨论质量</h2>
+          <p>比赛里解题的体验，与用一道题学习新方法的体验，可以不同。本站将“竞赛体验”和“学习训练”分别统计；简单题、模板题、交互题，都按实际用途讨论。题目难度、平台标签、个人是否顺利做出，分别记录。</p>
+          <h2>21 个分数，9 个参考区间</h2>
+          <div id="bandsTable" class="bands-table"></div>
+          <p class="rule-callout">0 分可以包含清楚的观察、合理的证明、常规优化和工具训练价值。模板没有自动扣分，熟悉工具也没有自动加分；正分需要具体的额外亮点，负分需要具体的失衡。</p>
+          <h2>判断收益，也看完成的成本</h2>
+          <div class="criteria-grid">
+            <article><span>01 / INSIGHT</span><h3>观察究竟带来了什么</h3><p>说明它消除了哪些枚举、状态或依赖。区分题目特有的结构发现、非直接的方法迁移与常规整理；一个性质做完可以精彩，也可以只是一般题。</p></article>
+            <article><span>02 / MODEL</span><h3>模型与方法是否贴合</h3><p>规则和限制是否共同服务于核心问题？归约到经典模型可以就是亮点；条件都能写进算法，只说明可处理，还需要解释发现的价值。</p></article>
+            <article><span>03 / RETURN</span><h3>发现之后，还要付出什么</h3><p>分别看发现、证明与实现的回报。后续推导若持续产生结构收益，可以支撑高分；若主要剩下繁杂维护、分类或调参，需要衡量这份负担。</p></article>
+            <article><span>04 / ALTERNATIVES</span><h3>不同解法提供了什么选择</h3><p>比较真实可行路线的思维、代码和常数取舍。多解可以增加探索空间，但解法数量本身不加分；存在更简单满分做法时，按它重新检查评价。</p></article>
+            <article><span>05 / EXPERIENCE</span><h3>惊喜、难度与质量分别看</h3><p>“没想到”“做难了”是有用的体验记录。高难标签、熟悉程度或一次惊艳，不能单独决定质量；请指出值得保留的发现或不相称的成本。</p></article>
+            <article><span>06 / RELIABILITY</span><h3>把可用性问题核实清楚</h3><p>定义、样例、部分分与资源设置是否合理？卡常、非预期解和数据漏洞要附可复核依据；尚未核验时保留为反馈，不能当成已证实的缺陷。</p></article>
+          </div>
+          <p class="rule-callout">这些是判断依据，不是自动加权公式。步骤多、代码长、使用高级算法都不自动加减分；同一个观察带来的多种好处，也不重复累计。</p>
+          <h2>如何把反馈用于下一次评价</h2>
+          <ul class="prose-list">
+            <li><strong>分数与理由各自保留。</strong>仅有分数的记录照常计票，可用于分布和对照；没有写出的理由保持未知，不替评价者补上解释。</li>
+            <li><strong>原话与归纳分开。</strong>引用评语时保留作者、题目、版本、用途与来源。由多个案例推得的规则明确标为归纳，不把个人观点写成社区共识。</li>
+            <li><strong>分歧本身有信息。</strong>均值只是样本摘要，同时看每位评价者的分数、经历和原文。批量提交与单题提交同权，不因写了理由增加票权。</li>
+            <li><strong>校准仍需内容核验。</strong>已看过反馈后的重评属于回归检查。AI 原评分与人类反馈分别展示，不能把对齐分数当作独立预测，也不据此宣称准确率提高。</li>
+          </ul>
+          <h2>每一条记录如何参与统计</h2>
+          <ul class="prose-list">
+            <li>独立完成或参考题解并理解完整做法后，可提交总评分。只打分也计票，理由为选填；经历为自报，本站不冒称 AC 认证。</li>
+            <li>同一 GitHub 账号、同一题目版本、同一用途只计最后更新的一条记录。修改版本不沿用旧评分。</li>
+            <li>显示均值、中位数、人数和完整分布。同用途下有 1 个有效账号评分即可进入榜单；零人显示“待评”。单人评分代表该评价者的判断，不代表社区共识。</li>
+            <li>支持多题合并提交。编辑整批会更新其中所有评分；关闭或排除整批会撤回本批的最新记录，较旧记录不会因此恢复，更新的其他记录不受影响。管理员排除不合规记录时应说明原因；账号限制不能完全防止小号刷分。</li>
+            <li>AI 参考不计入真人均分、人数、分布或榜单。剧透在详情里折叠展示。公开提交会保留 GitHub 身份；草稿只存在本浏览器。</li>
+          </ul>
+          <div class="guide-links"><a class="inline-link" href="./scoring.md" target="_blank" rel="noopener">阅读完整标准 ↗</a><a class="inline-link" href="./feedback.html">反馈校准与来源 →</a><a class="inline-link" href="./ai-anchors.html">查看 AI 参考 →</a></div>
+        </div>
+        <aside class="document-aside">
+          <div class="note-card"><span class="small-label">THREE DIFFERENT THINGS</span><h3>质量 / 难度 / 收藏</h3><p>质量讨论题目好不好。<br>难度讨论完成它有多难。<br>收藏记录你想不想再看。</p><p>本站收藏仅保存在浏览器，不参与质量分。没有核实的平台难度，保持未知。</p></div>
+          <div class="quiet-card"><h3>题目出错了？</h3><p>题意、数据、判题或时限的明确问题，请另附可复核材料反馈。低分不能代替故障说明。</p><a id="reportIssue" class="inline-link" target="_blank" rel="noopener noreferrer" href="https://github.com/yjdqwq/yjdqwq.github.io/issues/new">提交问题反馈 ↗</a></div>
+          <div class="note-card"><span class="small-label">ISSUE FEEDBACK</span><h3>从具体案例理解标准</h3><p>查看本次纳入的记录、重复与撤回处理，以及标准调整对应的原始评语。</p><a class="inline-link" href="./feedback.html">打开反馈校准 →</a></div>
+        </aside>
+      </div>
     </section>
 
     <section id="researchView" class="view-section document-view" hidden>
@@ -81,7 +122,7 @@
       <div class="research-grid"><article class="source-card"><span class="source-number">01</span><div><span class="outline-pill">已实现的社区反馈</span><h2>QOJ</h2><p>用户的赞踩反馈与题目 Difficulty 分开展示。净票数反映反馈规模，不能直接换算成 −10～10 的质量分。</p><div class="source-takeaway">我们采用：质量与难度分开，样本规模随分数展示。</div><a href="https://qoj.ac/problems?order=desc&amp;sort=zan" target="_blank" rel="noopener noreferrer">查看题库 ↗</a></div></article><article class="source-card"><span class="source-number">02</span><div><span class="outline-pill">独立的社区项目</span><h2>USACO Rating</h2><p>以 1～5 评价质量，以 800～3500 估计难度，由经审核用户投票，并提供均值／中位数视角。它不是 USACO 官方评分。</p><div class="source-takeaway">我们采用：分别收集质量与经历，保留分歧。</div><a href="https://codetiger.me/project/usaco/frontend/faq.html" target="_blank" rel="noopener noreferrer">阅读项目 FAQ ↗</a></div></article><article class="source-card"><span class="source-number">03</span><div><span class="outline-pill">特定赛事的评审随笔</span><h2>UCup 审题 rubric</h2><p>Qingyu 将质量、难度、熟悉程度分别记录；有价值的题目也可能不适合某场比赛。作者明确说明这是一篇随笔。</p><div class="source-takeaway">我们采用：区分使用场景，可选补充具体理由。</div><a href="https://qoj.ac/blog/qingyu/blog/1777" target="_blank" rel="noopener noreferrer">阅读作者原文 ↗</a></div></article><article class="source-card"><span class="source-number">04</span><div><span class="outline-pill">官方命题方向</span><h2>IOI 征题指南</h2><p>欢迎简单与困难、富有创意且容易理解的题目，也鼓励有洞察、允许多种解法的简单题。</p><div class="source-takeaway">我们采用：题目难度、算法名称和代码长度不等于质量。</div><a href="https://ioi2027.de/contest/call-for-tasks/" target="_blank" rel="noopener noreferrer">查看 IOI 2027 征题 ↗</a></div></article></div><div class="research-footnote"><h3>两个容易混淆的地方</h3><p><a href="https://help.luogu.com.cn/manual/luogu/problem/difficulty" target="_blank" rel="noopener noreferrer">洛谷的八档颜色</a>和 <a href="https://codeforces.com/blog/entry/62865" target="_blank" rel="noopener noreferrer">CF problem rating</a>描述难度。CF 的 <a href="https://codeforces.com/blog/entry/81293" target="_blank" rel="noopener noreferrer">Problem Likeability Feature</a>原帖是一份社区提案，不能据此宣称官方已经上线了该质量功能。</p><a class="inline-link" href="./research.md" target="_blank" rel="noopener">完整研究记录与来源 ↗</a></div>
     </section>
   </main>
-  <footer class="site-footer"><a class="footer-brand" href="#library">题评 <span>Problem Notes</span></a><p>评价一道题，也尊重一种不同的解题体验。</p><a href="#guide">标准 v1.0 ↗</a></footer>
+  <footer class="site-footer"><a class="footer-brand" href="#library">题评 <span>Problem Notes</span></a><p>评价一道题，也尊重一种不同的解题体验。</p><a href="#guide">标准 v1.1 ↗</a></footer>
 
   <dialog id="problemDialog" class="problem-dialog" aria-labelledby="detailTitle">
     <div class="dialog-heading"><div><p class="small-label" id="detailCode"></p><h2 id="detailTitle"></h2><p class="detail-source" id="detailSource"></p></div><button class="close-button" data-close="problemDialog" aria-label="关闭题目详情">×</button></div>

@@ -21,8 +21,10 @@ function renderAIAnchorDetail() {
   const section = $('detailAIAnchor'); const anchor = aiAnchorFor(state.current?.key);
   section.replaceChildren(); section.hidden = !anchor;
   if (!anchor) return;
-  section.append(el('strong', '', state.hidden ? 'AI 参考分数已隐藏' : `AI 参考 ${signed(anchor.score)} · 题面初评`));
+  section.append(el('strong', '', state.hidden ? 'AI 参考分数已隐藏' : `历史 AI 初评 ${signed(anchor.score)} · 2026-10-26`));
   section.append(el('p', '', `与真人评分分开，不计入均分、人数或榜单。${anchor.confidence === 'low' ? '完整解法尚待复核。' : '主要结构判断较明确。'}未逐题实现或实测。`));
+  const feedback = state.data.calibration?.reviewedKeys?.includes(anchor.key);
+  section.append(el('p', '', feedback ? '已有真人反馈：待按 v1.1 标准复核。历史分数保留供对照，分歧不自动等于哪一方有误。' : '此为旧版初评，本次未逐题重新核验完整解法。'));
   if (!state.hidden) {
     const details = el('details'); details.append(el('summary', '', '查看 AI 理由（可能剧透）'), el('p', '', anchor.reason)); section.append(details);
   }
@@ -222,8 +224,8 @@ function renderTable() {
     score.append(el('span', !s.n || state.hidden ? 'quality-unrated' : `quality-value ${toneFor(s.mean)}`, scoreLabel(s.mean)));
     const anchor = aiAnchorFor(p.key);
     if (anchor) {
-      const ai = el('a', 'ai-reference-score', state.hidden ? 'AI 分数已隐藏' : `AI 参考 ${signed(anchor.score)}`);
-      ai.href = `./ai-anchors.html#${anchor.code}`; ai.title = 'AI 题面初评，未计入真人评分'; score.append(ai);
+      const ai = el('a', 'ai-reference-score', state.hidden ? 'AI 分数已隐藏' : `历史 AI ${signed(anchor.score)}`);
+      ai.href = `./ai-anchors.html#${anchor.code}`; ai.title = '2026-10-26 历史初评，未计入真人评分；查看反馈与复核状态'; score.append(ai);
     }
     const chart = el('td', 'chart-cell'); chart.append(miniature(s));
     const count = el('td', 'vote-count', String(s.n));
