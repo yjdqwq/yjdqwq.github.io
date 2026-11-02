@@ -1,6 +1,6 @@
 import { MIN_RANK_VOTES, EXPERIENCES, PURPOSES, TAGS, BANDS, signed, bandFor, toneFor, validatePayload, prepareSubmissions, summarize } from './lib.mjs';
 import { selectCatalogue } from './catalogue.mjs';
-import { parseBatchInput, resolveBatch, batchCodesFromURL, batchURL } from './batch.mjs';
+import { parseBatchInput, resolveBatch, removeBatchReviews, batchCodesFromURL, batchURL } from './batch.mjs';
 const $ = id => document.getElementById(id);
 const storage = {
   get(key, fallback) { try { return JSON.parse(localStorage.getItem(`problem-notes:${key}`)) ?? fallback; } catch { return fallback; } },
@@ -9,7 +9,7 @@ const storage = {
 const savedFavorites = storage.get('favorites', []);
 const state = { data: { problems: [], reviews: [] }, purpose: 'contest', mode: 'library', hidden: storage.get('hide-scores', false) === true,
   favorites: new Set(Array.isArray(savedFavorites) ? savedFavorites : []), current: null, score: null, tags: new Set(), loaded: false, page: 1,
-  batchCodes: null, batchRaw: '', batchExperience: storage.get('batch-experience', ''), currentPurpose: 'contest' };
+  batchCodes: null, batchRaw: '', batchUndo: null, batchExperience: storage.get('batch-experience', ''), currentPurpose: 'contest' };
 let toastTimer, draftTimer;
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 3500); }
@@ -48,14 +48,30 @@ function batchDrafts() {
 function renderBatchProgress() {
   if (!batchActive()) return;
   const drafts = batchDrafts(); const rated = drafts.filter(({ draft }) => draft.score !== null).length;
-  $('batchProgress').textContent = `已打分 ${rated} / ${drafts.length} · 自动保存在本浏览器，尚未公开提交`;
+  $('batchProgress').textContent = state.batchCodes.length ? `已打分 ${rated} / ${drafts.length} · 自动保存在本浏览器，尚未公开提交` : '清单已清空，可以添加下一批题目。';
   $('submitBatch').textContent = `提交本批评分（${rated}）`;
   $('submitBatch').disabled = !rated;
   $('startBatch').textContent = rated && rated < drafts.length ? '继续未评题目 →' : rated ? '检查本批评分 →' : '逐题评分 →';
 }
 function saveBatchState() {
-  storage.set('batch-list', { active: state.batchCodes !== null, codes: state.batchCodes || [], raw: state.batchRaw });
+  const saved = storage.set('batch-list', { active: state.batchCodes !== null, codes: state.batchCodes || [], raw: state.batchRaw, undoCodes: state.batchUndo });
   try { history.replaceState(null, '', batchURL(location.href, state.batchCodes)); } catch { /* File previews may not permit history changes. */ }
+  return saved;
+}
+function updateBatchList(codes, undoCodes) {
+  const previous = { batchCodes: state.batchCodes, batchRaw: state.batchRaw, batchUndo: state.batchUndo };
+  state.batchCodes = codes; state.batchRaw = codes.join('\n'); state.batchUndo = undoCodes;
+  if (!saveBatchState()) {
+    Object.assign(state, previous); saveBatchState();
+    toast('清单保存失败，已保留原清单。'); return false;
+  }
+  renderTable(); renderBatchNavigation(); return true;
+}
+function removeSubmittedFromBatch(reviews) {
+  if (state.batchCodes === null || !reviews.length) return 0;
+  const next = removeBatchReviews(state.batchCodes, state.data.problems, reviews);
+  if (!next.removed.length || !updateBatchList(next.codes, state.batchUndo || state.batchCodes)) return 0;
+  return next.removed.length;
 }
 function renderBatchBar(selection) {
   const active = batchActive(); $('batchSummary').hidden = !active;
@@ -68,6 +84,8 @@ function renderBatchBar(selection) {
     $('batchCount').textContent = state.loaded ? `批量清单 · ${selection.problems.length} / ${state.batchCodes.length} 道已找到` : `正在读取 ${state.batchCodes.length} 道题…`;
     $('batchExperience').value = Object.hasOwn(EXPERIENCES, state.batchExperience) ? state.batchExperience : '';
     renderBatchProgress();
+    $('batchRemoved').hidden = !state.batchUndo;
+    if (state.batchUndo) $('batchRemovedMessage').textContent = `已从清单移除 ${state.batchUndo.length - state.batchCodes.length} 道题，评分草稿仍保留。`;
     $('batchMissing').replaceChildren();
     if (state.loaded && selection.missing.length) {
       $('batchMissing').append(el('span', '', '尚未收录：'));
@@ -137,6 +155,7 @@ function quickScoreCell(problem) {
 function openSubmission(raw) {
   const parts = prepareSubmissions(raw); const total = parts.reduce((n, part) => n + part.count, 0);
   $('submissionSummary').textContent = parts.length === 1 ? `本次包含 ${total} 条记录，只需提交一个 Issue。` : `本次包含 ${total} 条记录，内容较长，已分为 ${parts.length} 份。请逐份提交。`;
+  $('batchSubmissionNote').hidden = state.batchCodes === null || !removeBatchReviews(state.batchCodes, state.data.problems, parts.flatMap(part => part.reviews)).removed.length;
   $('submissionParts').replaceChildren();
   parts.forEach((part, index) => {
     const section = el('section', 'submission-part');
@@ -156,7 +175,14 @@ function openSubmission(raw) {
     });
     const link = el('a', 'button primary small', part.manual ? '打开 GitHub 并粘贴 ↗' : '前往 GitHub 确认 ↗');
     link.href = part.url; link.target = '_blank'; link.rel = 'noopener noreferrer';
-    actions.append(copy, link); section.append(actions, details); $('submissionParts').append(section);
+    const status = el('p', 'muted small'); status.hidden = true; status.setAttribute('role', 'status');
+    function leaveForGitHub() {
+      const removed = removeSubmittedFromBatch(part.reviews);
+      if (removed) { status.textContent = `已从清单移除本份 ${removed} 道题；请在 GitHub 完成提交。`; status.hidden = false; }
+    }
+    link.addEventListener('click', leaveForGitHub);
+    link.addEventListener('auxclick', event => { if (event.button === 1) leaveForGitHub(); });
+    actions.append(copy, link); section.append(actions, status, details); $('submissionParts').append(section);
   });
   openDialog($('submissionDialog'));
 }
@@ -243,9 +269,10 @@ function renderTable() {
   $('jumpPage').max = pages; $('jumpPage').value = state.page;
   $('pagination').hidden = total === 0;
   $('tableEmpty').hidden = items.length > 0 || !state.loaded;
-  $('tableEmpty').querySelector('h3').textContent = state.mode === 'rank' ? '榜单还在等待第一批评价' : '没有找到匹配的题目';
-  $('tableEmpty').querySelector('p').textContent = state.mode === 'rank' ? `同用途下至少 ${MIN_RANK_VOTES} 人评价后进入榜单。先去题库留下第一份判断。` : '试试其他关键词，或收录一道你想讨论的题。';
-  $('clearFilters').textContent = state.mode === 'rank' ? '回到题库' : '清除筛选';
+  const batchEmpty = batchActive() && !state.batchCodes.length;
+  $('tableEmpty').querySelector('h3').textContent = batchEmpty ? '当前清单已清空' : state.mode === 'rank' ? '榜单还在等待第一批评价' : '没有找到匹配的题目';
+  $('tableEmpty').querySelector('p').textContent = batchEmpty ? '可以添加下一批题目；移出清单的评分草稿仍保留，也可以撤销移除。' : state.mode === 'rank' ? `同用途下至少 ${MIN_RANK_VOTES} 人评价后进入榜单。先去题库留下第一份判断。` : '试试其他关键词，或收录一道你想讨论的题。';
+  $('clearFilters').textContent = batchEmpty ? '添加下一批题目' : state.mode === 'rank' ? '回到题库' : '清除筛选';
   $('problemCount').textContent = state.data.problems.length.toLocaleString('zh-CN');
   $('reviewCount').textContent = state.data.reviews.length;
   const eye = $('hideScores'); eye.textContent = state.hidden ? '◉ 显示评分' : '◉ 隐藏评分'; eye.setAttribute('aria-pressed', String(state.hidden));
@@ -403,6 +430,7 @@ $('hideScores').addEventListener('click', () => {
   if ($('problemDialog').open && state.current) { renderDistribution(reviewsFor(state.current.key)); renderReviews(reviewsFor(state.current.key)); renderAIAnchorDetail(); }
 });
 $('clearFilters').addEventListener('click', () => {
+  if (batchActive() && !state.batchCodes.length) { openBatchDialog(); return; }
   $('search').value = ''; $('platform').value = ''; $('favoritesOnly').checked = false; $('independentOnly').checked = false;
   state.page = 1;
   if (state.mode === 'rank') location.hash = 'library'; else renderTable();
@@ -413,13 +441,14 @@ $('openBatch').addEventListener('click', openBatchDialog); $('editBatch').addEve
 $('batchInput').addEventListener('input', previewBatch);
 $('batchForm').addEventListener('submit', event => {
   event.preventDefault(); const parsed = previewBatch(); if (!parsed?.codes.length) return;
-  state.batchCodes = parsed.codes; state.batchRaw = $('batchInput').value; state.page = 1;
+  state.batchCodes = parsed.codes; state.batchRaw = $('batchInput').value; state.batchUndo = null; state.page = 1;
   $('search').value = ''; $('platform').value = ''; $('favoritesOnly').checked = false; $('sort').value = 'catalogue';
   saveBatchState(); $('batchDialog').close();
   if (state.mode !== 'library') location.hash = 'library'; else renderTable();
   $('libraryHeading').scrollIntoView({ block: 'start' });
 });
-$('exitBatch').addEventListener('click', () => { state.batchCodes = null; state.page = 1; saveBatchState(); renderTable(); });
+$('exitBatch').addEventListener('click', () => { state.batchCodes = null; state.batchUndo = null; state.page = 1; saveBatchState(); renderTable(); });
+$('undoBatchRemoval').addEventListener('click', () => { if (state.batchUndo) updateBatchList(state.batchUndo, null); });
 $('startBatch').addEventListener('click', () => {
   const drafts = batchDrafts(); const next = drafts.find(({ draft }) => draft.score === null) || drafts[0];
   if (next) showProblem(next.p); else toast('先收录清单里尚未找到的题目，再刷新数据。');
@@ -499,8 +528,12 @@ try {
   const fromURL = batchCodesFromURL(location.href);
   const saved = storage.get('batch-list', null);
   const parsed = fromURL ?? (saved?.active && Array.isArray(saved.codes) ? parseBatchInput(saved.codes.join(',')) : null);
-  if (parsed?.codes.length) { state.batchCodes = parsed.codes; state.batchRaw = fromURL ? parsed.codes.join('\n') : typeof saved?.raw === 'string' ? saved.raw : parsed.codes.join('\n'); }
+  if (parsed) { state.batchCodes = parsed.codes; state.batchRaw = fromURL ? parsed.codes.join('\n') : typeof saved?.raw === 'string' ? saved.raw : parsed.codes.join('\n'); }
   else if (typeof saved?.raw === 'string') state.batchRaw = saved.raw;
+  if (state.batchCodes !== null && Array.isArray(saved?.undoCodes) && JSON.stringify(state.batchCodes) === JSON.stringify(saved.codes)) {
+    const undo = parseBatchInput(saved.undoCodes.join(',')).codes; const previous = new Set(undo);
+    if (undo.length > state.batchCodes.length && state.batchCodes.every(code => previous.has(code))) state.batchUndo = undo;
+  }
 } catch (error) { toast(error.message); }
 changeView(); loadData();
 

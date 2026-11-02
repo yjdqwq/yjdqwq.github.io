@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { gunzipSync } from 'node:zlib';
-import { parseBatchInput, resolveBatch, batchURL, batchCodesFromURL, MAX_BATCH_PROBLEMS } from '../public/batch.mjs';
-import { canonicalProblem, validatePayload } from '../public/lib.mjs';
+import { parseBatchInput, resolveBatch, removeBatchReviews, batchURL, batchCodesFromURL, MAX_BATCH_PROBLEMS } from '../public/batch.mjs';
+import { canonicalProblem, validatePayload, prepareSubmissions } from '../public/lib.mjs';
 import { selectCatalogue } from '../public/catalogue.mjs';
 import { mergeCatalogue } from '../scripts/catalogue.mjs';
 
@@ -44,6 +44,44 @@ test('bookmark URLs round-trip the ordered list and can clear it without losing 
 test('large inputs fail explicitly rather than truncating the list', () => {
   assert.throws(() => parseBatchInput(Array.from({ length: MAX_BATCH_PROBLEMS + 1 }, (_, i) => `P${i + 1}`).join(',')));
   assert.throws(() => parseBatchInput(' '.repeat(100001)));
+});
+
+const batchProblem = (code, version = 'public-v1') => ({ ...canonicalProblem(`https://www.luogu.com.cn/problem/${code}`), key: `luogu:${code}@${version}`, title: code, version });
+const batchReview = (p, extra = {}) => validatePayload({ schema: 1, type: 'review', problemUrl: p.url, problemTitle: p.title,
+  version: p.version, purpose: 'contest', experience: 'independent', score: 0, ...extra });
+
+test('handoff removes only exact submitted entries and preserves unrated and missing codes in order', () => {
+  const problems = ['P1', 'P2', 'B3'].map(code => batchProblem(code));
+  const codes = ['P2', 'P999999', 'P1', 'B3'];
+  const result = removeBatchReviews(codes, problems, [batchReview(problems[0])]);
+  assert.deepEqual(result, { codes: ['P2', 'P999999', 'B3'], removed: ['P1'] });
+  assert.deepEqual(codes, ['P2', 'P999999', 'P1', 'B3']);
+  assert.deepEqual(removeBatchReviews(result.codes, problems, [batchReview(problems[0])]).removed, []);
+  assert.deepEqual(removeBatchReviews(codes, problems, []).codes, codes);
+});
+
+test('handoff does not remove a matching code submitted for another version or platform', () => {
+  const current = batchProblem('P1'); const revised = batchProblem('P1', 'revised-v2');
+  const remote = validatePayload({ schema: 1, type: 'review', problemUrl: 'https://codeforces.com/problemset/problem/985/F',
+    problemTitle: 'CF985F', purpose: 'contest', experience: 'independent', score: 0 });
+  assert.deepEqual(removeBatchReviews(['P1', 'CF985F'], [current, revised, batchProblem('CF985F')], [batchReview(revised), remote]),
+    { codes: ['P1', 'CF985F'], removed: [] });
+});
+
+test('each split handoff leaves all unopened parts and unknown codes in the queue', () => {
+  const problems = Array.from({ length: 100 }, (_, i) => batchProblem(`P${i + 1}`));
+  const reviews = problems.map(p => batchReview(p, { reason: '评'.repeat(1000) }));
+  const parts = prepareSubmissions({ schema: 1, type: 'review-batch', reviews });
+  assert.ok(parts.length > 1);
+  let codes = [...problems.map(p => p.code), 'P999999']; let completed = 0;
+  for (const part of parts) {
+    const result = removeBatchReviews(codes, problems, part.reviews);
+    completed += part.count;
+    assert.equal(result.removed.length, part.count);
+    assert.deepEqual(result.codes, [...problems.slice(completed).map(p => p.code), 'P999999']);
+    codes = result.codes;
+  }
+  assert.deepEqual(codes, ['P999999']);
 });
 test('P, B and CF IDs resolve together against the saved catalogue and manual additions', async () => {
   const input = 'B3607 P1001 CF985F';

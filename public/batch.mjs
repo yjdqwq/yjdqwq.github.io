@@ -47,6 +47,13 @@ export function resolveBatch(codes, catalogue) {
   return { problems, keys: problems.map(p => p.key), missing };
 }
 
+export function removeBatchReviews(codes, catalogue, reviews) {
+  const submitted = new Set(reviews.map(review => review.key));
+  const removed = resolveBatch(codes, catalogue).problems.filter(p => submitted.has(p.key)).map(p => p.code);
+  const completed = new Set(removed);
+  return { codes: codes.filter(code => !completed.has(code)), removed };
+}
+
 export function batchCodesFromURL(url) {
   const value = new URL(url).searchParams.get('list');
   return value === null ? null : parseBatchInput(value);

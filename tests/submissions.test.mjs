@@ -76,6 +76,7 @@ test('short submissions are prefilled; long ones use a short URL and copyable bo
   const short = prepareSubmissions(batch([review(), review(1002)]));
   assert.equal(short.length, 1); assert.equal(short[0].manual, false);
   assert.equal(short[0].count, 2);
+  assert.deepEqual(short[0].reviews, [validatePayload(review()), validatePayload(review(1002))]);
   assert.equal(new URL(short[0].url).searchParams.get('body'), short[0].body);
   const long = prepareSubmissions(review(1001, { reason: '评'.repeat(2000), spoiler: '解'.repeat(5000) }));
   assert.equal(long.length, 1); assert.equal(long[0].manual, true);
@@ -90,9 +91,15 @@ test('large batches are split within the body limit without dropping or changing
   assert.ok(parts.length > 1 && parts.length < reviews.length);
   assert.equal(parts.reduce((n, p) => n + p.count, 0), reviews.length);
   assert.ok(parts.every(p => new TextEncoder().encode(p.body).length <= MAX_ISSUE_BODY_BYTES && p.url.length < MAX_ISSUE_URL_LENGTH));
+  assert.deepEqual(parts.flatMap(p => p.reviews), reviews.map(validatePayload));
   const issues = parts.map((p, index) => ({ ...issue(index + 1, review()), body: p.body }));
   const data = buildDataset([], issues);
   assert.equal(data.reviews.length, reviews.length);
   assert.equal(new Set(data.reviews.map(r => r.key)).size, reviews.length);
   assert.ok(data.reviews.every(r => r.score === 0 && r.reason === '评'.repeat(100)));
+});
+
+test('problem requests carry no reviews for batch removal', () => {
+  const parts = prepareSubmissions({ schema: 1, type: 'problem', problemUrl: review().problemUrl, problemTitle: '收录题目' });
+  assert.deepEqual(parts[0].reviews, []);
 });

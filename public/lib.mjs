@@ -148,7 +148,8 @@ export function prepareSubmissions(raw) {
     const body = issueBody(payload); const fullURL = issueLink(payload);
     const manual = fullURL.length > MAX_ISSUE_URL_LENGTH;
     return { body, url: manual ? issueLink(payload, { includeBody: false }) : fullURL, manual,
-      count: payload.type === 'review-batch' ? payload.reviews.length : 1 };
+      count: payload.type === 'review-batch' ? payload.reviews.length : 1,
+      reviews: payload.type === 'review-batch' ? payload.reviews : payload.type === 'review' ? [payload] : [] };
   });
 }
 
