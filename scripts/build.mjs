@@ -60,7 +60,7 @@ await writeFile(new URL('data/ratings.json', dist), JSON.stringify(data));
 await writeFile(new URL('data/feedback-calibration.json', dist), JSON.stringify(feedbackReport, null, 2) + '\n');
 await writeFile(new URL('data/feedback-source.json', dist), JSON.stringify(feedbackSnapshot, null, 2) + '\n');
 await writeFile(new URL('scoring.md', dist), (await readFile(new URL('SCORING.md', root), 'utf8')).replaceAll('(RESEARCH.md)', '(research.md)'));
-await cp(new URL('RESEARCH.md', root), new URL('research.md', dist));
+await writeFile(new URL('research.md', dist), (await readFile(new URL('RESEARCH.md', root), 'utf8')).replaceAll('(SCORING.md)', '(scoring.md)'));
 const css = await readFile(new URL('public/styles.css', root), 'utf8');
 const html = await readFile(new URL('public/index.html', root), 'utf8');
 const modulePaths = ['lib.mjs', 'catalogue.mjs', 'batch.mjs', 'app.mjs', 'ai-anchors.mjs', 'feedback.mjs'];

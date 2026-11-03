@@ -1,4 +1,4 @@
-import { MIN_RANK_VOTES, EXPERIENCES, PURPOSES, TAGS, BANDS, signed, bandFor, toneFor, validatePayload, prepareSubmissions, summarize } from './lib.mjs';
+import { MIN_RANK_VOTES, EXPERIENCES, PURPOSES, TAGS, BANDS, SCORING_VERSION, scoreGuidance, signed, bandFor, toneFor, validatePayload, prepareSubmissions, summarize } from './lib.mjs';
 import { selectCatalogue } from './catalogue.mjs';
 import { parseBatchInput, resolveBatch, removeBatchReviews, batchCodesFromURL, batchURL } from './batch.mjs';
 const $ = id => document.getElementById(id);
@@ -24,7 +24,7 @@ function renderAIAnchorDetail() {
   section.append(el('strong', '', state.hidden ? 'AI 参考分数已隐藏' : `历史 AI 初评 ${signed(anchor.score)} · 2026-10-26`));
   section.append(el('p', '', `与真人评分分开，不计入均分、人数或榜单。${anchor.confidence === 'low' ? '完整解法尚待复核。' : '主要结构判断较明确。'}未逐题实现或实测。`));
   const feedback = state.data.calibration?.reviewedKeys?.includes(anchor.key);
-  section.append(el('p', '', feedback ? '已有真人反馈：待按 v1.1 标准复核。历史分数保留供对照，分歧不自动等于哪一方有误。' : '此为旧版初评，本次未逐题重新核验完整解法。'));
+  section.append(el('p', '', feedback ? `已有真人反馈：待按 v${SCORING_VERSION} 标准复核。历史分数保留供对照，分歧不自动等于哪一方有误。` : '此为旧版初评，本次未逐题重新核验完整解法。'));
   if (!state.hidden) {
     const details = el('details'); details.append(el('summary', '', '查看 AI 理由（可能剧透）'), el('p', '', anchor.reason)); section.append(details);
   }
@@ -133,7 +133,7 @@ function quickScoreCell(problem) {
   const cell = el('td', 'quick-score-cell'); const draft = problemDraft(problem);
   const score = el('select', 'quick-score'); score.setAttribute('aria-label', `${problem.code} 我的质量评分`);
   score.append(new Option('未打分', ''));
-  for (let n = -10; n <= 10; n++) score.append(new Option(`${signed(n)} · ${bandFor(n).label}`, String(n)));
+  for (let n = -10; n <= 10; n++) score.append(new Option(`${signed(n)} · ${bandFor(n, state.purpose).label}`, String(n)));
   score.value = draft.score === null ? '' : String(draft.score);
   const experience = el('select', 'quick-experience'); experience.setAttribute('aria-label', `${problem.code} 解题经历`);
   experience.append(new Option('选择经历', ''));
@@ -332,10 +332,11 @@ function updateScoreSelection() {
   for (const button of $('scoreChooser').children) {
     const selected = Number(button.dataset.score) === state.score && state.score !== null;
     button.classList.toggle('is-selected', selected); button.setAttribute('aria-pressed', String(selected));
+    button.setAttribute('aria-label', `${signed(Number(button.dataset.score))} 分，${bandFor(Number(button.dataset.score), state.currentPurpose).label}`);
   }
   $('selectedScore').replaceChildren();
   if (state.score === null) $('selectedScore').textContent = '请主动选择一个分数；未选择不等于 0。';
-  else { const b = bandFor(state.score); $('selectedScore').append(el('strong', toneFor(state.score), signed(state.score)), document.createTextNode(`${b.label} · ${b.text}`)); }
+  else { const b = bandFor(state.score, state.currentPurpose); $('selectedScore').append(el('strong', toneFor(state.score), signed(state.score)), document.createTextNode(`${b.label} · ${b.text}`)); }
   updateSubmit();
 }
 function currentPayload() {
@@ -362,6 +363,8 @@ function showProblem(problem) {
   $('detailCode').textContent = `${problem.platform} / ${problem.code}`;
   $('detailTitle').textContent = problem.title; $('detailSource').textContent = `${problem.source || '社区收录'}${problem.difficulty ? ` · 平台难度：${problem.difficulty}` : ''}`;
   $('originalLink').href = problem.url; $('detailPurpose').textContent = PURPOSES[state.purpose]; $('formPurpose').textContent = PURPOSES[state.purpose]; $('detailVersion').textContent = problem.version;
+  $('scorePurposeScale').textContent = state.currentPurpose === 'training' ? '0 = 一般题' : '0～+2 = 勉强可用';
+  $('scorePurposeGuidance').textContent = scoreGuidance(state.currentPurpose);
   const reviews = reviewsFor(problem.key); renderDistribution(reviews); renderReviews(reviews);
   renderAIAnchorDetail();
   $('reviewForm').reset(); $('formError').hidden = true;

@@ -5,8 +5,20 @@ export const MAX_ISSUE_BODY_BYTES = 60000;
 export const MAX_ISSUE_URL_LENGTH = 7000;
 export const EXPERIENCES = { independent: '独立完成', editorial: '参考题解并理解' };
 export const PURPOSES = { contest: '竞赛体验', training: '学习训练' };
+export const SCORING_VERSION = '1.2';
+export const TEMPLATE_CONTEST_BASELINE = -6;
 export const TAGS = ['观察有趣', '模型自然', '证明漂亮', '学习路径清楚', '实现负担重', '题意绕', '工具拼装感', '资源设置欠妥'];
 export const BANDS = [
+  { min: -10, max: -9, label: '绝世⑩题', text: '极端糟糕的设计或比赛体验，保留给最严重的情况。' },
+  { min: -8, max: -6, label: '绝对不能放进比赛', text: '作为比赛题不可接受，缺乏应有的出题价值或存在严重失衡。' },
+  { min: -5, max: -3, label: '完全没意思', text: '作为比赛题完全没意思，完成后的收获不足以支撑过程。' },
+  { min: -2, max: -1, label: '没意思', text: '作为比赛题缺少趣味和收获，整体体验不值得推荐。' },
+  { min: 0, max: 2, label: '勉强可以放', text: '勉强可以放进比赛；达到可用边界，仍不算值得推荐的好题。' },
+  { min: 3, max: 5, label: '好题', text: '有清楚的结构收益、合理的线索和相称的实现成本。' },
+  { min: 6, max: 8, label: '优秀', text: '核心发现与模型结合突出，值得推荐和反复回味。' },
+  { min: 9, max: 10, label: '极优秀', text: '在充分理解和比较后，仍属于难得的出色设计。' }
+];
+export const TRAINING_BANDS = [
   { min: -10, max: -9, label: '极差', text: '有根本性的设计失衡，负担远大于解题收益。' },
   { min: -8, max: -6, label: '很差', text: '严重的设计或体验问题压过了题目本身的价值。' },
   { min: -5, max: -3, label: '较差', text: '有具体缺点，完成成本与获得的洞察不相称。' },
@@ -18,7 +30,10 @@ export const BANDS = [
   { min: 9, max: 10, label: '极优秀', text: '在充分理解和比较后，仍属于难得的出色设计。' }
 ];
 export const signed = (value, digits = 0) => { const rounded = Number(Number(value).toFixed(digits)); return `${rounded > 0 ? '+' : ''}${rounded.toFixed(digits)}`; };
-export const bandFor = score => BANDS.find(b => Math.round(score) >= b.min && Math.round(score) <= b.max);
+export const bandFor = (score, purpose = 'contest') => (purpose === 'training' ? TRAINING_BANDS : BANDS).find(b => Math.round(score) >= b.min && Math.round(score) <= b.max);
+export const scoreGuidance = purpose => purpose === 'training'
+  ? '学习训练以 0 为一般题，按理解路径和训练收益评价；模板题可以有很高的训练价值。'
+  : `竞赛评分中，0～+2 为勉强可以放进比赛；纯模板以 ${TEMPLATE_CONTEST_BASELINE} 为基准，按照搬程度和完成负担上下浮动。`;
 export const toneFor = score => score < 0 ? 'negative' : score > 0 ? 'positive' : 'neutral';
 
 export function validateAIAnchors(raw) {
